@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>MVVM-demo</title>
+</head>
+
+</html>
+
+<body>
+  <div id="app" test="1">
+    <p>姓名：{{name}} {{age}} {{age}} </p>
+    <p>年龄：{{age}}</p>
+    <button @click="increase">年龄+1</button>
+    <input vm-model="age" :bind="name">
+    <button @click="sayHi">sayHi</button>
+  </div>
+</body>
+<script>
+  const vm = new VM({
+    el: '#app',
+    data: {
+      user: {
+        name: 'a',
+        age: 10,
+      },
+      age: 18,
+      name: '小明',
+      obj: {
+        a: 1
+      }
+    },
+    methods: {
+      increase() {
+        this.age++
+      },
+      sayHi() {
+        alert('hi')
+      }
+    },
+    watch: {
+      age() {
+        console.log('年龄变成了' + this.age)
+        this.name = this.name + this.age
+      }
+    }
+  })
+</script>

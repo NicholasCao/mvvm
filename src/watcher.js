@@ -1,0 +1,53 @@
+import Dep from './dep.js'
+
+export default function Watcher(vm, expOrFn, callback) {
+  vm._watchers.push(this)
+  this.vm = vm
+
+  // 存放dep的ID
+  // 用于判断该dep是否已添加watcher
+  this.depIds = new Set()
+
+  // 更新触发回调函数
+  this.cb = callback
+
+  this.getter = () => vm[expOrFn]
+  this.setter = val => {
+    vm[expOrFn] = val
+  }
+  // 在创建watcher实例时先取一次值
+  this.value = this.get()
+}
+
+Watcher.prototype = {
+  get() {
+    // 在读取值时先将观察者对象赋值给Dep.target 否则Dep.target为空 不会触发收集依赖
+    Dep.target = this
+    const value = this.getter()
+    // 触发依赖后置为空
+    Dep.target = null
+    return value
+  },
+
+  set(val) {
+    this.setter(val)
+  },
+
+  update() {
+    const value = this.get()
+    const oldValue = this.value
+
+    if (value !== oldValue) {
+      this.cb.call(this.vm, value, oldValue)
+    }
+    this.value = value
+  },
+
+  addDep(dep) {
+    // 如果dep不存在 则在对应的dep中添加watcher
+    if (!this.depIds.has(dep.id)) {
+      this.depIds.add(dep.id)
+      dep.addSub(this)
+    }
+  }
+}
