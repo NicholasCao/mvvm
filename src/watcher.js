@@ -1,4 +1,5 @@
 import Dep from './dep.js'
+import { deepGetter, deepSetter, isObject } from './utils.js'
 
 export default function Watcher(vm, expOrFn, callback) {
   vm._watchers.push(this)
@@ -11,10 +12,23 @@ export default function Watcher(vm, expOrFn, callback) {
   // 更新触发回调函数
   this.cb = callback
 
-  this.getter = () => vm[expOrFn]
-  this.setter = val => {
-    vm[expOrFn] = val
+  // method
+  if (typeof vm[expOrFn] === 'function') {
+    this.getter = () => vm[expOrFn].bind(vm)
+    this.setter = undefined
+  } else {
+    // const res = parseExpression(expOrFn)
+    this.getter = deepGetter(vm, expOrFn)
+    this.setter = deepSetter(vm, expOrFn)
+    // (value) => {
+    //   vm[expOrFn] = value
+    // }
   }
+  // console.log(vm[expOrFn])
+  // this.getter = () => vm[expOrFn]
+  // this.setter = val => {
+  //   vm[expOrFn] = val
+  // }
   // 在创建watcher实例时先取一次值
   this.value = this.get()
 }
@@ -23,21 +37,21 @@ Watcher.prototype = {
   get() {
     // 在读取值时先将观察者对象赋值给Dep.target 否则Dep.target为空 不会触发收集依赖
     Dep.target = this
-    const value = this.getter()
+    const value = this.getter.call(this.vm, this.vm)
     // 触发依赖后置为空
     Dep.target = null
     return value
   },
 
-  set(val) {
-    this.setter(val)
-  },
+  // set(val) {
+  //   this.getter.call(this.vm, this.vm)
+  // },
 
   update() {
     const value = this.get()
     const oldValue = this.value
 
-    if (value !== oldValue) {
+    if (value !== oldValue || isObject(value)) {
       this.cb.call(this.vm, value, oldValue)
     }
     this.value = value

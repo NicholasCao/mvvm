@@ -1,6 +1,7 @@
 import Observer from './observer.js'
 import Compile from './compile.js'
 import Watcher from './watcher.js'
+import { deepGet, isObject } from './utils.js'
 
 // ViewModel
 export default function VM(options) {
@@ -51,7 +52,6 @@ VM.prototype = {
     })
   },
 
-  // todo deep watch
   initWatch() {
     if (this.$options.watch) {
       const watch = this.$options.watch
@@ -78,13 +78,35 @@ VM.prototype = {
   },
 
   $watch(variable, callback) {
-    if (typeof variable === 'object') {
-      // deep watch
-      // for (const key in variable) {
-      //   this.$watch(key, callback)
-      // }
+    const val = deepGet(this, variable)
+
+    // 对象则递归watch
+    if (isObject(val) && !Array.isArray(val)) {
+      for (const key in val) {
+        this.$watch(`${variable}.${key}`, callback)
+      }
     } else {
       new Watcher(this, variable, callback)
+    }
+  },
+
+  // 当为对象添加属性或修改数组的值时可用这个方法 能实时更新
+  $set(obj, key, val) {
+    if (!this[obj]) return
+
+    this[obj][key] = val
+    this[obj].__ob__.dep.notify()
+  },
+
+  // 当为对象删除属性或删除数组的值时可用这个方法 能实时更新
+  $delete(obj, key) {
+    if (!this[obj]) return
+
+    if (Array.isArray(this[obj])) {
+      this[obj].splice(key, 1)
+    } else {
+      delete this[obj][key]
+      this[obj].__ob__.dep.notify()
     }
   }
 }

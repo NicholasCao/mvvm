@@ -1,4 +1,4 @@
-import Handles from './handles.js'
+import Handlers from './handlers.js'
 import Watcher from './watcher.js'
 
 // 指令解析器
@@ -9,7 +9,7 @@ export default function Compile(vm) {
   this.onRe = /^(vm-on:|@)/
   this.bindRe = /^(vm-bind:|:)/
   this.modelRe = /^vm-model/
-  this.braceRe1 = /{{\w+}}/g
+  this.braceRe1 = /{{((?:.|\n)+?)}}/g
   this.braceRe2 = /[{}]/g
 
   this.dirs = []
@@ -32,16 +32,16 @@ Compile.prototype = {
       if (this.onRe.test(e.name)) {
         // vm-on:|@
         name = e.name.replace(this.onRe, '')
-        this.addDir(Handles.on, name, e.value, el)
+        this.addDir(Handlers.on, name, e.value, el)
       } else if (this.bindRe.test(e.name)) {
         // vm-bind:|:
         el.removeAttribute(e.name.split('=')[0])
         name = e.name.replace(this.bindRe, '')
-        this.addDir(Handles.bind, name, e.value, el)
+        this.addDir(Handlers.bind, name, e.value, el)
       } else if (this.modelRe.test(e.name)) {
         // vm-model
         name = e.name.replace(this.modelRe, '')
-        this.addDir(Handles.model, name, e.value, el)
+        this.addDir(Handlers.model, name, e.value, el)
       }
     })
 
@@ -64,10 +64,10 @@ Compile.prototype = {
     }
   },
 
-  addDir(handle, dirName, value, el) {
+  addDir(handle, name, value, el) {
     this.dirs.push({
       vm: this.vm,
-      dirName,
+      name,
       handle,
       expOrFn: value,
       el
@@ -82,10 +82,10 @@ Compile.prototype = {
     this.dirs.forEach(e => {
       const handle = e.handle
       if (handle.implement) {
-        handle.implement(e.vm, e.el, e.dirName, e.expOrFn)
+        handle.implement(e.vm, e.el, e.name, e.expOrFn)
       }
       const update = (newVal, oldVal) => {
-        handle.update(e.vm, e.el, e.expOrFn, newVal, oldVal)
+        handle.update(e.vm, e.el, e.name, newVal, oldVal)
       }
       // 监听attribute
       new Watcher(this.vm, e.expOrFn, update)
@@ -97,10 +97,10 @@ Compile.prototype = {
       const rawValue = e.nodeValue
       array.forEach(str => {
         const variable = str.replace(this.braceRe2, '')
-        Handles.textNode.implement(vm, e, variable)
+        Handlers.textNode.implement(vm, e, variable)
 
         const update = (newVal, oldVal) => {
-          Handles.textNode.update(vm, newVal, oldVal, e, variable, rawValue, that.braceRe1, that.braceRe2)
+          Handlers.textNode.update(vm, newVal, oldVal, e, variable, rawValue, that.braceRe1, that.braceRe2)
         }
         // 监听文本节点
         new Watcher(vm, variable, update)

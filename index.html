@@ -9,11 +9,19 @@
 </html>
 
 <body>
-  <div id="app" test="1">
-    <p>姓名：{{name}} {{age}} {{age}} </p>
+  <div id="app" :class="user.a">
+    <p>姓名：{{name}} user.a:{{user.a}} {{age}} </p>
+    <p> user.a: {{user.a}} </p>
+    <p> user.c.b: {{user.c.b}} </p>
     <p>年龄：{{age}}</p>
+    <p> a[0] {{a[0]}}</p>
+    <p> a[1] {{a[1]}}</p>
+    <button @click="changeName">changeName</button>
     <button @click="increase">年龄+1</button>
-    <input vm-model="age" :bind="name">
+    <button @click="increase2">user.a+1</button>
+    <button @click="increase3">user.c.b+1</button>
+    <button @click="push">push</button>
+    <input vm-model="user.a" :bind="name">
     <button @click="sayHi">sayHi</button>
   </div>
 </body>
@@ -21,9 +29,13 @@
   const vm = new VM({
     el: '#app',
     data: {
+      a: [0, 1, 2],
       user: {
         name: 'a',
-        age: 10,
+        a: 10,
+        c: {
+          b: 2
+        }
       },
       age: 18,
       name: '小明',
@@ -32,18 +44,40 @@
       }
     },
     methods: {
+      changeName() {
+        this.name = '小明' + Math.random(10).toFixed(2)*100
+      },
       increase() {
         this.age++
+      },
+      increase2() {
+        this.user.a++
+      },
+      increase3() {
+        this.user.c.b++
+      },
+      push() {
+        this.a.push(1)
       },
       sayHi() {
         alert('hi')
       }
     },
     watch: {
+      a(v) {
+        console.log(v)
+      },
       age() {
         console.log('年龄变成了' + this.age)
-        this.name = this.name + this.age
+      },
+      user(v) {
+        console.log(v)
       }
     }
+  })
+
+  // deep watch的方法
+  vm.$watch('user.c.b', function(b) {
+    console.log(b)
   })
 </script>

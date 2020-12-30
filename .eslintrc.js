@@ -10,6 +10,8 @@ module.exports = {
     'indent': ['error', 2],
     'no-new': 0,
     'quote-props': 0,
+    'no-new-func': 0,
+    'no-proto': 0,
     'space-before-function-paren': ['error', 'never'],
     'arrow-parens': ['error', 'as-needed'],
     'object-curly-spacing': ['error', 'always'],
