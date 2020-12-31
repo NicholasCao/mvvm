@@ -1,6 +1,8 @@
 # mvvm-framework
 A mini mvvm framework for graduation project, just a toy.
 
+[![Build Status](https://travis-ci.org/NicholasCao/mvvm.svg?branch=main](https://travis-ci.org/NicholasCao/mvvm)
+
 todo:
 - [x] deep get set
 - [x] 数组监听
