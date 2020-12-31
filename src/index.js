@@ -23,7 +23,7 @@ VM.prototype = {
     new Observer(this._data)
 
     // 解析指令
-    new Compile(this)
+    new Compile(this, this.$el)
 
     // 生成dep之后才能watch
     this.initWatch()

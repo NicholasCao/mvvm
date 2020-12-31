@@ -6,7 +6,8 @@ A mini mvvm framework for graduation project, just a toy.
 todo:
 - [x] deep get set
 - [x] 数组监听
-- [ ] vm-for
+- [x] vm-for
+- [ ] vm-for内进一步compile
 - [ ] test with dom
 
 watcher 各种映射关系的实例

@@ -10,7 +10,7 @@
 
 <body>
   <div id="app" :class="user.a">
-    <p>姓名：{{name}} user.a:{{user.a}} {{age}} </p>
+    <p>姓名：{{name}} user.a:{{user.a}} <span> {{age}} </span></p>
     <p> user.a: {{user.a}} </p>
     <p> user.c.b: {{user.c.b}} </p>
     <p>年龄：{{age}}</p>
@@ -21,8 +21,19 @@
     <button @click="increase2">user.a+1</button>
     <button @click="increase3">user.c.b+1</button>
     <button @click="push">push</button>
+    <button @click="pushb">pushb</button>
     <input vm-model="user.a" :bind="name">
     <button @click="sayHi">sayHi</button>
+    <p vm-for="(val, key) in a">
+      <!-- <li> -->
+        a[{{key}}]: {{val}}
+      <!-- </li> -->
+    </p>
+    <p vm-for="(val, key) in b">
+      <!-- <li> -->
+        b[{{key}}]: {{val}}
+      <!-- </li> -->
+    </p>
   </div>
 </body>
 <script>
@@ -30,6 +41,7 @@
     el: '#app',
     data: {
       a: [0, 1, 2],
+      b: [3, 2, 1],
       user: {
         name: 'a',
         a: 10,
@@ -58,6 +70,9 @@
       },
       push() {
         this.a.push(1)
+      },
+      pushb() {
+        this.b.push(1)
       },
       sayHi() {
         alert('hi')

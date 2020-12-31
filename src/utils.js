@@ -42,3 +42,19 @@ export function deepSetter(vm, exp) {
     ? new Function('value', `vm.${exp} = value`)
     : value => { vm[exp] = value }
 }
+
+// dom
+export function replace(oldNode, newNode) {
+  const parent = oldNode.parentNode
+  if (parent) {
+    parent.replaceChild(newNode, oldNode)
+  }
+}
+
+export function remove(el) {
+  el.parentNode.removeChild(el)
+}
+
+export function insertNode(newNode, oldNode) {
+  oldNode.parentNode.insertBefore(newNode, oldNode)
+}
