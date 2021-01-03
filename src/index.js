@@ -1,4 +1,4 @@
-import Observer from './observer.js'
+import observe from './observer.js'
 import Compile from './compile.js'
 import Watcher from './watcher.js'
 import { deepGet, isObject } from './utils.js'
@@ -20,7 +20,7 @@ VM.prototype = {
     this.initMethods()
 
     // 监听数据
-    new Observer(this._data)
+    observe(this._data)
 
     // 解析指令
     new Compile(this, this.$el)

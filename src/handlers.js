@@ -84,8 +84,6 @@ export default {
         } else {
           valueKey = match[1].trim()
         }
-      } else {
-        valueKey = match[1].trim()
       }
 
       // 锚点定位

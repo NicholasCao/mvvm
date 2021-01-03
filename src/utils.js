@@ -36,12 +36,12 @@ export function deepSet(vm, exp, value) {
   else vm[exp] = value
 }
 
-export function deepSetter(vm, exp) {
-  exp = exp.trim()
-  return exp.indexOf('.') > -1 || exp.indexOf('[') > -1
-    ? new Function('value', `vm.${exp} = value`)
-    : value => { vm[exp] = value }
-}
+// export function deepSetter(vm, exp) {
+//   exp = exp.trim()
+//   return exp.indexOf('.') > -1 || exp.indexOf('[') > -1
+//     ? new Function('value', `vm.${exp} = value`)
+//     : value => { vm[exp] = value }
+// }
 
 // dom
 export function replace(oldNode, newNode) {

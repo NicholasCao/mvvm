@@ -2,6 +2,7 @@
 A mini mvvm framework for graduation project, just a toy.
 
 [![Build Status](https://travis-ci.org/NicholasCao/mvvm.svg?branch=main)](https://travis-ci.org/NicholasCao/mvvm)
+[![Codecov](https://codecov.io/gh/NicholasCao/mvvm/branch/master/graph/badge.svg)](https://codecov.io/github/NicholasCao/mvvm?branch=master)
 
 todo:
 - [x] deep get set

@@ -1,5 +1,5 @@
 import Dep from './dep.js'
-import { deepGetter, deepSetter, isObject } from './utils.js'
+import { deepGetter, isObject } from './utils.js'
 
 export default function Watcher(vm, expOrFn, callback) {
   vm._watchers.push(this)
@@ -17,18 +17,9 @@ export default function Watcher(vm, expOrFn, callback) {
     this.getter = () => vm[expOrFn].bind(vm)
     this.setter = undefined
   } else {
-    // const res = parseExpression(expOrFn)
     this.getter = deepGetter(vm, expOrFn)
-    this.setter = deepSetter(vm, expOrFn)
-    // (value) => {
-    //   vm[expOrFn] = value
-    // }
   }
-  // console.log(vm[expOrFn])
-  // this.getter = () => vm[expOrFn]
-  // this.setter = val => {
-  //   vm[expOrFn] = val
-  // }
+
   // 在创建watcher实例时先取一次值
   this.value = this.get()
 }

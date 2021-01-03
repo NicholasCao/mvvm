@@ -82,6 +82,21 @@ describe('ViewModel', () => {
       <p> Jack 18 </p>
       <p> ShangHai ShenZhen </p>
     `)
+
+    vm.user.name = 'Jack'
+    expect(vm.$el.innerHTML).toBe(`
+      <p> Jack 18 </p>
+      <p> ShangHai ShenZhen </p>
+    `)
+
+    vm.user = {
+      name: 'Tom',
+      age: 20
+    }
+    expect(vm.$el.innerHTML).toBe(`
+      <p> Tom 20 </p>
+      <p> ShangHai ShenZhen </p>
+    `)
   })
 
   test('04_model', () => {
@@ -155,7 +170,27 @@ describe('ViewModel', () => {
     `)
   })
 
-  test('06_compile_in_vm-for', () => {
+  test('06_for_error', () => {
+    const options = {
+      data: {
+        count: 1
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-for="i in count"> {{i}} </p>
+    `
+
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
+    new Compile(vm, vm.$el)
+    expect(consoleError).toHaveBeenCalledWith('count必须为对象或数组')
+  })
+
+  test('07_compile_in_vm-for', () => {
     const options = {
       data: {
         cities: ['ShangHai', 'ShenZhen'],
@@ -201,6 +236,32 @@ describe('ViewModel', () => {
         <li> cities[2]: BeiJing </li>
         <span> 2 </span>
       </ul>
+    `)
+  })
+
+  test('08_obverse_twice', () => {
+    const options = {
+      data: {
+        user: {
+          name: 'Jack',
+          age: 18
+        }
+      }
+    }
+
+    const vm = new ViewModel(options)
+    const vm2 = new ViewModel({
+      data: vm._data
+    })
+
+    vm2.$el = document.createElement('div')
+    vm2.$el.innerHTML = `
+      <p> {{ user.name }} </p>
+    `
+    new Compile(vm2, vm2.$el)
+
+    expect(vm2.$el.innerHTML).toBe(`
+      <p> Jack </p>
     `)
   })
 })

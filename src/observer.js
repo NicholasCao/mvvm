@@ -50,7 +50,8 @@ export default function observe(value) {
     return
   }
   let ob
-  if (hasOwn.call(value, '__ob__') && value.__ob__ instanceof Observer) {
+
+  if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else {
     ob = new Observer(value)
