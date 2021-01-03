@@ -9,8 +9,16 @@ todo:
 - [x] vm-for
 - [x] vm-for内进一步compile
 - [ ] vm-for内 vm-for嵌套
-- [ ] test with dom
+- [x] test with dom
 
 watcher 各种映射关系的实例
 dep 每个变量的依赖
 dep.notify -> 通知watcher -> watcher触发update函数
+
+实现指令:
+- vm-on | @
+- vm-bind | :
+- {{ text }}
+- vm-model
+- vm-for
+- [ ] vm-show
