@@ -124,6 +124,7 @@ export default {
       for (const key in value) {
         cloneNode = node.cloneNode(true)
         html = cloneNode.innerHTML
+
         if (valueKey) {
           re1 = new RegExp(`{{\\s*${valueKey}\\s*}}`, 'g')
           html = html.replace(re1, value[key])
@@ -134,11 +135,15 @@ export default {
         }
 
         cloneNode.innerHTML = html
+
+        cloneNode.removeAttribute('vm-for')
+
+        // compile cloneNode
+        new Compile(vm, cloneNode)
         frag.appendChild(cloneNode)
       }
+
       insertNode(frag, anchor)
-      // new Compile(vm, frag)
-      // insertNode(frag, anchor)
     }
   }
 }

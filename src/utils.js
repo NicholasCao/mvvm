@@ -52,7 +52,7 @@ export function replace(oldNode, newNode) {
 }
 
 export function remove(el) {
-  el.parentNode.removeChild(el)
+  if (el) el.parentNode.removeChild(el)
 }
 
 export function insertNode(newNode, oldNode) {

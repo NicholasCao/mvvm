@@ -6,7 +6,8 @@ export default function Compile(vm, el) {
   this.el = el
   this.vm = vm
 
-  this.vm._textNodes = []
+  this._textNodes = []
+  this.dirs = []
 
   this.onRe = /^(vm-on:|@)/
   this.bindRe = /^(vm-bind:|:)/
@@ -71,7 +72,7 @@ Compile.prototype = {
     })
 
     // 处理文本节点
-    vm._textNodes.forEach(e => {
+    this._textNodes.forEach(e => {
       const array = e.nodeValue.match(this.braceRe1)
       const rawValue = e.nodeValue
       if (array) {
@@ -143,6 +144,6 @@ Compile.prototype = {
   },
 
   compileTextNode(node) {
-    this.vm._textNodes.push(node)
+    this._textNodes.push(node)
   }
 }
