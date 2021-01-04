@@ -13,6 +13,7 @@ export default function Compile(vm, el) {
   this.bindRe = /^(vm-bind:|:)/
   this.modelRe = /^vm-model/
   this.forRe = /^vm-for/
+  this.showRe = /^vm-show/
   this.braceRe1 = /{{((?:.|\n)+?)}}/g
   this.braceRe2 = /[{}]/g
 
@@ -136,6 +137,10 @@ Compile.prototype = {
           // vm-for
           this.addDir(Handlers.for, name, value, node)
           isFor = true
+        } else if (this.showRe.test(name)) {
+          // vm-show
+          node.removeAttribute(name.split('=')[0])
+          this.addDir(Handlers.show, name, value, node)
         }
       })
 

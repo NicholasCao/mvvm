@@ -7,7 +7,8 @@
     "dev": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "lint": "./node_modules/.bin/eslint .",
-    "test": "./node_modules/.bin/jest"
+    "test": "./node_modules/.bin/jest",
+    "test-coverage": "./node_modules/.bin/jest --coverage"
   },
   "dependencies": {},
   "devDependencies": {

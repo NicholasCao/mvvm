@@ -264,4 +264,39 @@ describe('ViewModel', () => {
       <p> Jack </p>
     `)
   })
+
+  test('09_show', () => {
+    const options = {
+      data: {
+        count: 1,
+        show: true
+      },
+      methods: {
+        toggle() {
+          this.show = !this.show
+        }
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-show="show"> {{ count }} </p>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p> 1 </p>
+    `)
+
+    vm.toggle()
+    expect(vm.$el.innerHTML).toBe(`
+      <p style="display: none;"> 1 </p>
+    `)
+
+    vm.toggle()
+    expect(vm.$el.innerHTML).toBe(`
+      <p style=""> 1 </p>
+    `)
+  })
 })

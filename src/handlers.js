@@ -143,5 +143,17 @@ export default {
 
       insertNode(frag, anchor)
     }
+  },
+
+  // vm-show
+  show: {
+    implement(vm, node, name, expOrFn) {
+      node.__originalDisplay = node.style.display
+      if (!deepGet(vm, expOrFn)) node.style.display = 'none'
+    },
+    update(vm, node, name, newVal, oldVal) {
+      if (!newVal) node.style.display = 'none'
+      else node.style.display = node.__originalDisplay
+    }
   }
 }

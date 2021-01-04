@@ -24,6 +24,8 @@
     <button @click="pushb">pushb</button>
     <input vm-model="user.a" :bind="name">
     <button @click="sayHi">sayHi</button>
+    <button @click="toggle">toggle</button>
+    <p vm-show="show"> {{ age }} </p>
     <ul vm-for="(val, key) in a">
       <li>
         a[{{key}}]: {{val}}
@@ -55,7 +57,8 @@
       name: '小明',
       obj: {
         a: 1
-      }
+      },
+      show: true
     },
     methods: {
       changeName() {
@@ -78,6 +81,9 @@
       },
       sayHi() {
         alert('hi')
+      },
+      toggle() {
+        this.show = !this.show
       }
     },
     watch: {

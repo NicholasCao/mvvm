@@ -22,4 +22,4 @@ dep.notify -> 通知watcher -> watcher触发update函数
 - {{ text }}
 - vm-model
 - vm-for
-- [ ] vm-show
+- vm-show
