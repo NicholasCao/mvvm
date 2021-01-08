@@ -9,7 +9,7 @@
 </html>
 
 <body>
-  <div id="app" :class="user.a">
+  <div id="app" :class="name">
     <p>姓名：{{name}} user.a:{{user.a}} <span> {{age}} </span></p>
     <p> user.a: {{user.a}} </p>
     <p> user.c.b: {{user.c.b}} </p>
@@ -57,7 +57,7 @@
         }
       },
       age: 18,
-      name: '小明',
+      name: '',
       obj: {
         a: 1
       },
