@@ -1,4 +1,5 @@
 import Handlers from './handlers.js'
+import { deepGet } from './utils.js'
 import Watcher from './watcher.js'
 
 // 指令解析器
@@ -46,6 +47,8 @@ Compile.prototype = {
   render() {
     const vm = this.vm
 
+    this.dirs.sort((a, b) => b.handle.priority - a.handle.priority)
+
     // 处理attribute
     this.dirs.forEach(e => {
       if (e.name !== 'vm-for') {
@@ -57,7 +60,9 @@ Compile.prototype = {
           handle.update(vm, e.node, e.name, newVal, oldVal)
         }
         // 监听attribute
-        new Watcher(this.vm, e.expOrFn, update)
+        if (e.handle !== Handlers.on && deepGet(this.vm, e.expOrFn)) {
+          new Watcher(this.vm, e.expOrFn, update)
+        }
       } else {
         // vm-for
         const handle = e.handle
@@ -113,31 +118,35 @@ Compile.prototype = {
   },
 
   compileElement(node) {
-    if (node.hasAttributes()) {
+    // node._attributes 为vm-for修改后的attributes
+    if (node.hasAttributes() || node._attributes) {
       let isFor = false
-      const attrs = [...node.attributes]
+      const attrs = node._attributes || [...node.attributes]
+
+      if (node.attributes['vm-for']) {
+        isFor = true
+      }
 
       attrs.forEach(attr => {
         let name = attr.name.trim()
         const value = attr.value.trim()
 
-        if (this.onRe.test(name)) {
+        if (this.onRe.test(name) && !isFor) {
           // vm-on:|@
           name = name.replace(this.onRe, '')
           this.addDir(Handlers.on, name, value, node)
-        } else if (this.bindRe.test(name)) {
+        } else if (this.bindRe.test(name) && !isFor) {
           // vm-bind:|:
           node.removeAttribute(name.split('=')[0])
           name = name.replace(this.bindRe, '')
           this.addDir(Handlers.bind, name, value, node)
-        } else if (name === 'vm-model') {
+        } else if (name === 'vm-model' && !isFor) {
           // vm-model
           this.addDir(Handlers.model, name, value, node)
         } else if (name === 'vm-for') {
           // vm-for
           this.addDir(Handlers.for, name, value, node)
-          isFor = true
-        } else if (this.showRe.test(name)) {
+        } else if (this.showRe.test(name) && !isFor) {
           // vm-show
           node.removeAttribute(name.split('=')[0])
           this.addDir(Handlers.show, name, value, node)

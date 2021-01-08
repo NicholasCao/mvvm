@@ -12,13 +12,7 @@ export default function Watcher(vm, expOrFn, callback) {
   // 更新触发回调函数
   this.cb = callback
 
-  // method
-  if (typeof vm[expOrFn] === 'function') {
-    this.getter = () => vm[expOrFn].bind(vm)
-    this.setter = undefined
-  } else {
-    this.getter = deepGetter(vm, expOrFn)
-  }
+  this.getter = deepGetter(vm, expOrFn)
 
   // 在创建watcher实例时先取一次值
   this.value = this.get()

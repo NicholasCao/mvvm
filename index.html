@@ -35,8 +35,11 @@
         b[{{key2}}]: {{val2}}
       </span>
     </ul>
-    <p vm-for="(val, key) in b">
+    <p vm-for="(val, key) in b" :class="val" @click="clickB($event, val, key)">
       b[{{key}}]: {{val}}
+    </p>
+    <p vm-for="(val, key) in b">
+      <span :class="val" @click="clickB($event, val, key)"> b[{{key}}]: {{val}} </span>
     </p>
   </div>
 </body>
@@ -45,7 +48,7 @@
     el: '#app',
     data: {
       a: [0, 1, 2],
-      b: [3, 2, 1],
+      b: ['a', 'b', 'c'],
       user: {
         name: 'a',
         a: 10,
@@ -84,6 +87,9 @@
       },
       toggle() {
         this.show = !this.show
+      },
+      clickB(e, val, key) {
+        console.log(e, val, key)
       }
     },
     watch: {

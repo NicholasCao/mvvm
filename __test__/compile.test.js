@@ -239,7 +239,79 @@ describe('ViewModel', () => {
     `)
   })
 
-  test('08_obverse_twice', () => {
+  test('08_compile_on_bind_in_vm-for', () => {
+    let result
+    const options = {
+      data: {
+        cities: ['ShangHai', 'ShenZhen']
+      },
+      methods: {
+        click(e, val, index) {
+          result = [e, val, index]
+        }
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-for="(city, index) in cities" :class="city" @click="click($event, city, index)">
+        {{ city }}
+      </p>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p class="ShangHai">
+        ShangHai
+      </p><p class="ShenZhen">
+        ShenZhen
+      </p>
+    `)
+
+    vm.$el.querySelector('p').click()
+    expect(result[0] instanceof MouseEvent).toBe(true)
+    expect(result[1]).toBe('ShangHai')
+    expect(result[2]).toBe('0')
+  })
+
+  test('08_2_deep_compile_on_bind_in_vm-for', () => {
+    let result
+    const options = {
+      data: {
+        cities: ['ShangHai', 'ShenZhen']
+      },
+      methods: {
+        click(e, val, index) {
+          result = [e, val, index]
+        }
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-for="(city, index) in cities">
+        <span :class="city" @click="click($event, city, index)"> {{ city }} </span>
+      </p>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p>
+        <span @click="click($event, cities[0], 0)" class="ShangHai"> ShangHai </span>
+      </p><p>
+        <span @click="click($event, cities[1], 1)" class="ShenZhen"> ShenZhen </span>
+      </p>
+    `)
+
+    vm.$el.querySelector('span').click()
+    expect(result[0] instanceof MouseEvent).toBe(true)
+    expect(result[1]).toBe('ShangHai')
+    expect(result[2]).toBe('0')
+  })
+
+  test('09_obverse_twice', () => {
     const options = {
       data: {
         user: {
@@ -265,7 +337,7 @@ describe('ViewModel', () => {
     `)
   })
 
-  test('09_show', () => {
+  test('010_show', () => {
     const options = {
       data: {
         count: 1,
