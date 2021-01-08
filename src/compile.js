@@ -60,7 +60,7 @@ Compile.prototype = {
           handle.update(vm, e.node, e.name, newVal, oldVal)
         }
         // 监听attribute
-        if (e.handle !== Handlers.on && deepGet(this.vm, e.expOrFn)) {
+        if (e.handle !== Handlers.on && deepGet(this.vm, e.expOrFn) === undefined) {
           new Watcher(this.vm, e.expOrFn, update)
         }
       } else {

@@ -38,7 +38,7 @@ export default {
   bind: {
     priority: 8,
     implement(vm, node, name, expOrFn) {
-      node.setAttribute(name, deepGet(vm, expOrFn) ? deepGet(vm, expOrFn) : expOrFn)
+      node.setAttribute(name, deepGet(vm, expOrFn) === undefined ? deepGet(vm, expOrFn) : expOrFn)
     },
     update(vm, node, name, newVal, oldVal) {
       node.setAttribute(name, newVal)
