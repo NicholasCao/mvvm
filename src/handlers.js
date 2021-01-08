@@ -61,7 +61,7 @@ export default {
 
   // {{}}
   textNode: {
-    priority: 0,
+    priority: 1,
     implement(vm, textNode, variable) {
       textNode.nodeValue = textNode.nodeValue.replace(`{{${variable}}}`, deepGet(vm, variable))
     },
@@ -217,7 +217,7 @@ export default {
 
   // vm-show
   show: {
-    priority: 19,
+    priority: 0,
     implement(vm, node, name, expOrFn) {
       node.__originalDisplay = node.style.display
       if (!deepGet(vm, expOrFn)) node.style.display = 'none'
