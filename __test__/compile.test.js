@@ -341,7 +341,7 @@ describe('ViewModel', () => {
     const options = {
       data: {
         count: 1,
-        show: true
+        show: false
       },
       methods: {
         toggle () {
@@ -358,17 +358,17 @@ describe('ViewModel', () => {
     new Compile(vm, vm.$el)
 
     expect(vm.$el.innerHTML).toBe(`
-      <p> 1 </p>
-    `)
-
-    vm.toggle()
-    expect(vm.$el.innerHTML).toBe(`
       <p style="display: none;"> 1 </p>
     `)
 
     vm.toggle()
     expect(vm.$el.innerHTML).toBe(`
       <p style=""> 1 </p>
+    `)
+
+    vm.toggle()
+    expect(vm.$el.innerHTML).toBe(`
+      <p style="display: none;"> 1 </p>
     `)
   })
 
