@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <link rel="stylesheet" href="./style.css" />
+  <title>Start Page</title>
+</head>
+
+<body>
+  <div id="app">
+    <div id="greetingBox">
+      <span id="greeting" :style="greetingStyle">
+        {{ greeting }}
+      </span>
+    </div>
+
+    <div>
+      <svg t="1610097022343" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7854" width="200" height="200"><path d="M542.464 85.333333c23.466667-0.426667 45.696 8.106667 62.293333 24.32 16.682667 15.786667 25.6 37.546667 25.6 60.586667 0 46.933333 38.826667 84.949333 87.082667 84.949333 14.933333 0 29.866667-4.266667 43.093333-11.52 41.386667-22.272 93.013333-8.106667 116.48 31.573334l29.013334 49.92c7.253333 12.8 11.52 27.306667 11.52 42.24 0 30.293333-16.64 58.453333-43.52 73.386666-13.226667 7.253333-24.32 18.346667-32 31.146667a83.626667 83.626667 0 0 0 32 113.92 84.394667 84.394667 0 0 1 32 115.2l-29.013334 48.213333c-15.36 26.453333-43.946667 42.666667-74.666666 42.666667-15.36 0-30.72-3.84-43.52-11.52-13.653333-7.253333-28.586667-11.52-43.52-11.52-23.04 0-45.226667 8.96-61.44 25.173333-16.64 15.786667-25.6 37.546667-25.6 60.16 0 46.506667-38.826667 84.48-87.04 84.48h-58.453334c-23.04 0-44.8-9.386667-60.586666-25.173333-16.213333-16.213333-24.746667-37.546667-24.746667-59.733333 0-46.933333-38.4-84.906667-86.613333-84.906667-15.786667 0-31.146667 4.266667-44.373334 12.373333a91.733333 91.733333 0 0 1-66.133333 8.533334c-22.186667-5.973333-41.386667-20.48-52.906667-39.68l-27.306666-48.213334a83.157333 83.157333 0 0 1-10.666667-66.56c5.973333-22.613333 21.333333-41.813333 42.24-53.333333 13.226667-7.253333 24.32-17.92 32-31.146667a84.48 84.48 0 0 0-32-113.92 83.072 83.072 0 0 1-31.573333-113.92l27.306666-47.786666c11.52-20.053333 30.72-34.56 53.333334-40.533334a88.149333 88.149333 0 0 1 66.56 8.96c13.653333 7.253333 28.586667 11.093333 43.52 11.093334 23.04 0 45.226667-8.96 61.44-24.746667 16.213333-15.786667 25.173333-37.546667 25.173333-59.733333 0-46.933333 38.826667-84.906667 87.04-84.906667z m17.109333 319.189334a121.728 121.728 0 0 0-130.986666 25.173333c-34.133333 33.28-44.8 84.053333-26.026667 127.573333a119.210667 119.210667 0 0 0 110.506667 72.533334h0.426666c32 0.426667 61.866667-11.946667 84.48-34.133334 22.613333-21.76 35.413333-51.626667 35.413334-82.773333 0.426667-47.36-29.013333-90.453333-73.813334-108.373333z" fill="#2c2c2c" p-id="7855"></path></svg>
+    </div>
+      <div class="bgBox">
+      <video vm-show="isLiveBg" class="bg" id="liveBgBox" autoplay="true" loop="true" muted="true" :style="bgStyle" :src="liveBgLink">
+      </video>
+      <img vm-show="isImgBg" :src="bgLink":style="bgStyle" class="bg">
+      </img>
+      <div class="cover" :style="coverStyle"></div>
+    </div>
+
+    <div class="timeBox">
+      <h1 class="time"> {{ time }} </h1>
+    </div>
+    <input type="text" class="input" size="30" placeholder="Search" autocomplete="off" 
+      @keydown="input" @click="search" @blur="blur" vm-model="word" />
+    <button @click="change">change</button>
+
+
+    <div id="he-plugin-simple"></div>
+  </div>
+  <script>
+    const WIDGET = {
+      CONFIG: {
+        "modules": "102",
+        "background": 5,
+        "tmpColor": "FFFFFF",
+        "tmpSize": 16,
+        "cityColor": "FFFFFF",
+        "citySize": 16,
+        "aqiSize": 16,
+        "weatherIconSize": 24,
+        "alertIconSize": 18,
+        "padding": "10px 10px 10px 10px",
+        "shadow": "1",
+        "language": "auto",
+        "borderRadius": 5,
+        "fixed": "true",
+        "vertical": "middle",
+        "horizontal": "center",
+        "left": 10,
+        "bottom": 10,
+        "key": "77027206f8c846f4bc16d643c118d5ac"
+      }
+    }
+  </script>
+  <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/NicholasCao/mvvm/dist/vm.min.js"></script> -->
+  <script type="text/javascript" src="../dist/vm.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
