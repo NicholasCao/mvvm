@@ -184,7 +184,7 @@ describe('ViewModel', () => {
 
     const consoleError = jest
       .spyOn(console, 'error')
-      .mockImplementation(() => {})
+      .mockImplementation(() => { })
 
     new Compile(vm, vm.$el)
     expect(consoleError).toHaveBeenCalledWith('count必须为对象或数组')
@@ -369,6 +369,42 @@ describe('ViewModel', () => {
     vm.toggle()
     expect(vm.$el.innerHTML).toBe(`
       <p style=""> 1 </p>
+    `)
+  })
+
+  test('011_show_with_:style', () => {
+    const options = {
+      data: {
+        count: 1,
+        show: true,
+        style: ''
+      },
+      methods: {
+        toggle() {
+          this.show = !this.show
+        }
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-show="show" :style="style"> {{ count }} </p>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p style=""> 1 </p>
+    `)
+
+    vm.toggle()
+    expect(vm.$el.innerHTML).toBe(`
+      <p style="display: none;"> 1 </p>
+    `)
+
+    vm.style = 'color: red'
+    expect(vm.$el.innerHTML).toBe(`
+      <p style="color: red; display: none;"> 1 </p>
     `)
   })
 })

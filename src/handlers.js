@@ -38,10 +38,17 @@ export default {
   bind: {
     priority: 8,
     implement(vm, node, name, expOrFn) {
-      node.setAttribute(name, deepGet(vm, expOrFn) === undefined ? expOrFn : deepGet(vm, expOrFn))
+      const value = deepGet(vm, expOrFn) === undefined ? expOrFn : deepGet(vm, expOrFn)
+      node.setAttribute(name, value)
     },
     update(vm, node, name, newVal, oldVal) {
       node.setAttribute(name, newVal)
+
+      // 解决:style 与 vm-show的冲突
+      if (name === 'style') {
+        if (node._show) node.style.display = node.__originalDisplay
+        else if (node._show === false) node.style.display = 'none'
+      }
     }
   },
 
@@ -220,11 +227,21 @@ export default {
     priority: 0,
     implement(vm, node, name, expOrFn) {
       node.__originalDisplay = node.style.display
-      if (!deepGet(vm, expOrFn)) node.style.display = 'none'
+      if (!deepGet(vm, expOrFn)) {
+        node.style.display = 'none'
+        node._show = false
+      } else {
+        node._show = true
+      }
     },
     update(vm, node, name, newVal, oldVal) {
-      if (!newVal) node.style.display = 'none'
-      else node.style.display = node.__originalDisplay
+      if (!newVal) {
+        node.style.display = 'none'
+        node._show = false
+      } else {
+        node.style.display = node.__originalDisplay
+        node._show = true
+      }
     }
   }
 }

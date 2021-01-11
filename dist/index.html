@@ -25,7 +25,7 @@
     <input vm-model="user.a" :bind="name">
     <button @click="sayHi">sayHi</button>
     <button @click="toggle">toggle</button>
-    <p vm-show="show"> {{ age }} </p>
+    <p vm-show="show" :style="style"> {{ age }} </p>
     <ul vm-for="(val, key) in a">
       <li>
         a[{{key}}]: {{val}}
@@ -47,6 +47,7 @@
   const vm = new VM({
     el: '#app',
     data: {
+      style: '',
       a: [0, 1, 2],
       b: ['a', 'b', 'c'],
       user: {
