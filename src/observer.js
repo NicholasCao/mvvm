@@ -15,10 +15,10 @@ const methodsToPatch = [
 ]
 
 // 数组
-methodsToPatch.forEach(function(method) {
+methodsToPatch.forEach(method => {
   // 缓存原型自身的方法
   const original = arrayProto[method]
-  def(arrayMethods, method, function mutator(...args) {
+  def(arrayMethods, method, function mutator (...args) {
     // 保存旧的长度 用于vm-for
     this._oldLength = this.length
 
@@ -45,7 +45,7 @@ methodsToPatch.forEach(function(method) {
 })
 
 // 对数据进行监听
-export default function observe(value) {
+export default function observe (value) {
   if (!value || typeof value !== 'object') {
     return
   }
@@ -60,7 +60,7 @@ export default function observe(value) {
   return ob
 }
 
-function Observer(value) {
+function Observer (value) {
   this.dep = new Dep()
   def(value, '__ob__', this)
 
@@ -75,20 +75,20 @@ function Observer(value) {
 }
 
 Observer.prototype = {
-  walk(obj) {
+  walk (obj) {
     for (const key in obj) {
       defineReactive(obj, key, obj[key])
     }
   },
 
-  observeArray(array) {
+  observeArray (array) {
     array.forEach(item => {
       observe(item)
     })
   }
 }
 
-function defineReactive(obj, key, val) {
+function defineReactive (obj, key, val) {
   const dep = new Dep()
 
   let childOb = observe(val)
@@ -96,7 +96,7 @@ function defineReactive(obj, key, val) {
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
-    get() {
+    get () {
       // 收集对应的观察者对象
       if (Dep.target) {
         dep.depend()
@@ -107,7 +107,7 @@ function defineReactive(obj, key, val) {
       return val
     },
 
-    set(newVal) {
+    set (newVal) {
       if (val === newVal) {
         return
       }

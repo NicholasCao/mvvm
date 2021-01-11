@@ -6,7 +6,7 @@ describe('ViewModel', () => {
     const options = {
       data: { count: 1 },
       methods: {
-        add() {
+        add () {
           this.count++
         }
       }
@@ -36,7 +36,7 @@ describe('ViewModel', () => {
     const options = {
       data: { style: 'display: block' },
       methods: {
-        hide() {
+        hide () {
           this.style = 'display: none'
         }
       }
@@ -103,7 +103,7 @@ describe('ViewModel', () => {
     const options = {
       data: { count: 1 },
       methods: {
-        add() {
+        add () {
           this.count++
         }
       }
@@ -197,7 +197,7 @@ describe('ViewModel', () => {
         count: 1
       },
       methods: {
-        add() {
+        add () {
           this.count++
         }
       }
@@ -246,7 +246,7 @@ describe('ViewModel', () => {
         cities: ['ShangHai', 'ShenZhen']
       },
       methods: {
-        click(e, val, index) {
+        click (e, val, index) {
           result = [e, val, index]
         }
       }
@@ -282,7 +282,7 @@ describe('ViewModel', () => {
         cities: ['ShangHai', 'ShenZhen']
       },
       methods: {
-        click(e, val, index) {
+        click (e, val, index) {
           result = [e, val, index]
         }
       }
@@ -344,7 +344,7 @@ describe('ViewModel', () => {
         show: true
       },
       methods: {
-        toggle() {
+        toggle () {
           this.show = !this.show
         }
       }
@@ -380,7 +380,7 @@ describe('ViewModel', () => {
         style: ''
       },
       methods: {
-        toggle() {
+        toggle () {
           this.show = !this.show
         }
       }

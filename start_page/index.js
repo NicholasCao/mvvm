@@ -1,6 +1,6 @@
 // const baseUrl = 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/'
 
-const getTime = function() {
+const getTime = function () {
   const d = new Date()
   let h = d.getHours()
   let m = d.getMinutes()
@@ -27,25 +27,25 @@ const vm = new VM({
     word: ''
   },
   methods: {
-    change() {
+    change () {
       this.isLiveBg = !this.isLiveBg
       this.isImgBg = !this.isImgBg
       // if (this.isLiveBg) this.liveBgLink = 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/bg_live_1.mp4'
-    //   this.bgIndex++
-    //   if (this.bgIndex > bgNum) {
-    //     this.bgIndex = 1
-    //   }
-    //   this.bgLink = `${baseUrl}bg${this.bgIndex}.jpg`
+      // this.bgIndex++
+      // if (this.bgIndex > bgNum) {
+      //   this.bgIndex = 1
+      // }
+      // this.bgLink = `${baseUrl}bg${this.bgIndex}.jpg`
     },
-    search() {
+    search () {
       this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
-      // this.bgStyle = 'transform: scale(1.1);'
+      this.bgStyle = 'transform: scale(1.1);'
     },
-    blur() {
+    blur () {
       this.coverStyle = ''
       this.bgStyle = ''
     },
-    input(e) {
+    input (e) {
       if (e.keyCode === 13) {
         window.open(this.searchUrl + this.word)
       }

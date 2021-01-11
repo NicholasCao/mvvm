@@ -4,7 +4,7 @@ import Watcher from './watcher.js'
 import { deepGet, isObject } from './utils.js'
 
 // ViewModel
-export default function VM(options) {
+export default function VM (options) {
   // 存放观察者实例
   this._watchers = []
   // 存放文本节点 在compile上会用到
@@ -15,7 +15,7 @@ export default function VM(options) {
 
 VM.prototype = {
   // 初始化数据和方法
-  init() {
+  init () {
     this.initData()
     this.initMethods()
 
@@ -29,7 +29,7 @@ VM.prototype = {
     this.initWatch()
   },
 
-  initData() {
+  initData () {
     const vm = this
     vm.$el = document.querySelector(vm.$options.el)
     let data = vm.$options.data
@@ -42,7 +42,7 @@ VM.prototype = {
     })
   },
 
-  initMethods() {
+  initMethods () {
     const vm = this
     const methods = vm.$options.methods ? vm.$options.methods : {}
     const keys = Object.keys(methods)
@@ -52,7 +52,7 @@ VM.prototype = {
     })
   },
 
-  initWatch() {
+  initWatch () {
     if (this.$options.watch) {
       const watch = this.$options.watch
 
@@ -62,22 +62,22 @@ VM.prototype = {
     }
   },
 
-  proxy(target, sourceKey, key) {
+  proxy (target, sourceKey, key) {
     const sharedPropertyDefinition = {
       enumerable: true,
       configurable: true
     }
 
-    sharedPropertyDefinition.get = function proxyGetter() {
+    sharedPropertyDefinition.get = function proxyGetter () {
       return this[sourceKey][key]
     }
-    sharedPropertyDefinition.set = function proxySetter(val) {
+    sharedPropertyDefinition.set = function proxySetter (val) {
       this[sourceKey][key] = val
     }
     Object.defineProperty(target, key, sharedPropertyDefinition)
   },
 
-  $watch(variable, callback) {
+  $watch (variable, callback) {
     const val = deepGet(this, variable)
 
     // 对象则递归watch
@@ -91,7 +91,7 @@ VM.prototype = {
   },
 
   // 当为对象添加属性或修改数组的值时可用这个方法 能实时更新
-  $set(obj, key, val) {
+  $set (obj, key, val) {
     if (!this[obj]) return
 
     this[obj][key] = val
@@ -99,7 +99,7 @@ VM.prototype = {
   },
 
   // 当为对象删除属性或删除数组的值时可用这个方法 能实时更新
-  $delete(obj, key) {
+  $delete (obj, key) {
     if (!this[obj]) return
 
     if (Array.isArray(this[obj])) {

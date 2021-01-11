@@ -1,7 +1,7 @@
 import Dep from './dep.js'
 import { deepGetter, isObject } from './utils.js'
 
-export default function Watcher(vm, expOrFn, callback) {
+export default function Watcher (vm, expOrFn, callback) {
   vm._watchers.push(this)
   this.vm = vm
 
@@ -19,7 +19,7 @@ export default function Watcher(vm, expOrFn, callback) {
 }
 
 Watcher.prototype = {
-  get() {
+  get () {
     // 在读取值时先将观察者对象赋值给Dep.target 否则Dep.target为空 不会触发收集依赖
     Dep.target = this
     const value = this.getter.call(this.vm, this.vm)
@@ -28,11 +28,11 @@ Watcher.prototype = {
     return value
   },
 
-  // set(val) {
+  // set (val) {
   //   this.getter.call(this.vm, this.vm)
   // },
 
-  update() {
+  update () {
     const value = this.get()
     const oldValue = this.value
 
@@ -42,7 +42,7 @@ Watcher.prototype = {
     this.value = value
   },
 
-  addDep(dep) {
+  addDep (dep) {
     // 如果dep不存在 则在对应的dep中添加watcher
     if (!this.depIds.has(dep.id)) {
       this.depIds.add(dep.id)

@@ -5,6 +5,9 @@ module.exports = {
     node: true,
     jest: true
   },
+  globals: {
+    'VM': true
+  },
   extends: 'standard',
   rules: {
     'indent': ['error', 2],
@@ -12,7 +15,7 @@ module.exports = {
     'quote-props': 0,
     'no-new-func': 0,
     'no-proto': 0,
-    'space-before-function-paren': ['error', 'never'],
+    // 'space-before-function-paren': ['error', 'never'],
     'arrow-parens': ['error', 'as-needed'],
     'object-curly-spacing': ['error', 'always'],
     'comma-dangle': ['error', 'never'],

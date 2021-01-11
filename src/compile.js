@@ -3,7 +3,7 @@ import { deepGet } from './utils.js'
 import Watcher from './watcher.js'
 
 // 指令解析器
-export default function Compile(vm, el) {
+export default function Compile (vm, el) {
   this.el = el
   this.vm = vm
 
@@ -23,7 +23,7 @@ export default function Compile(vm, el) {
 }
 
 Compile.prototype = {
-  init() {
+  init () {
     if (this.el) {
       if (!this.compileNode(this.el)) {
         if (this.el.hasChildNodes()) {
@@ -35,7 +35,7 @@ Compile.prototype = {
     }
   },
 
-  addDir(handle, name, value, node) {
+  addDir (handle, name, value, node) {
     this.dirs.push({
       name,
       handle,
@@ -44,7 +44,7 @@ Compile.prototype = {
     })
   },
 
-  render() {
+  render () {
     const vm = this.vm
 
     this.dirs.sort((a, b) => b.handle.priority - a.handle.priority)
@@ -97,7 +97,7 @@ Compile.prototype = {
     })
   },
 
-  compileNodeList(nodes) {
+  compileNodeList (nodes) {
     nodes.forEach(node => {
       const flag = this.compileNode(node)
       if (!flag) {
@@ -108,7 +108,7 @@ Compile.prototype = {
     })
   },
 
-  compileNode(node) {
+  compileNode (node) {
     const type = node.nodeType
     if (type === 1) {
       return this.compileElement(node)
@@ -117,7 +117,7 @@ Compile.prototype = {
     }
   },
 
-  compileElement(node) {
+  compileElement (node) {
     // node._attributes 为vm-for修改后的attributes
     if (node.hasAttributes() || node._attributes) {
       let isFor = false
@@ -157,7 +157,7 @@ Compile.prototype = {
     }
   },
 
-  compileTextNode(node) {
+  compileTextNode (node) {
     this._textNodes.push(node)
   }
 }

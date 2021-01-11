@@ -31,7 +31,7 @@ describe('ViewModel', () => {
   test('02_data_type', () => {
     const as1 = new ViewModel({ data: { count: 1 } })
     const as2 = new ViewModel({
-      data() {
+      data () {
         return { count: 2 }
       }
     })
@@ -41,14 +41,14 @@ describe('ViewModel', () => {
 
   test('03_handler', () => {
     const vm = new ViewModel({
-      data() {
+      data () {
         return { count: 1 }
       },
       methods: {
-        increase() {
+        increase () {
           ++this.count
         },
-        decrease() {
+        decrease () {
           --this.count
         }
       }
@@ -63,19 +63,19 @@ describe('ViewModel', () => {
 
   test('04_watch_basic_usage', done => {
     const vm = new ViewModel({
-      data: function() {
+      data: function () {
         return { count: 1 }
       },
       methods: {
-        increase() {
+        increase () {
           ++this.count
         },
-        decrease() {
+        decrease () {
           --this.count
         }
       },
       watch: {
-        count(value) {
+        count (value) {
           expect(value).toBe(2)
           done()
         }
@@ -88,12 +88,12 @@ describe('ViewModel', () => {
 
   test('05_watch_nested_object', done => {
     const vm = new ViewModel({
-      data: function() {
+      data: function () {
         return { user: { name: 'Chen' } }
       },
 
       methods: {
-        setName(name) {
+        setName (name) {
           this.user.name = name
         }
       }
@@ -108,12 +108,12 @@ describe('ViewModel', () => {
 
   test('05_2_watch_nested_object2', done => {
     const vm = new ViewModel({
-      data: function() {
+      data: function () {
         return { user: { name: 'Chen' } }
       },
 
       methods: {
-        setName(name) {
+        setName (name) {
           this.user.name = name
         }
       }
@@ -128,12 +128,12 @@ describe('ViewModel', () => {
 
   test('05_2_watch_nested_object2', done => {
     const vm = new ViewModel({
-      data: function() {
+      data: function () {
         return { user: { name: 'Chen' } }
       },
 
       methods: {
-        setName(name) {
+        setName (name) {
           this.user.name = name
         }
       }
@@ -148,11 +148,11 @@ describe('ViewModel', () => {
 
   test('06_watch_array', done => {
     const vm = new ViewModel({
-      data: function() {
+      data: function () {
         return { cities: ['HangZhou'] }
       },
       methods: {
-        add(city) {
+        add (city) {
           this.cities.push(city)
         }
       }
@@ -279,7 +279,7 @@ describe('ViewModel', () => {
 
   // test('13_watch_multidimensional_array', done => {
   //   const vm = new ViewModel({
-  //     data: function() {
+  //     data: function () {
   //       return {
   //         numbers: [
   //           [0, 0, 0, 2],
@@ -304,7 +304,7 @@ describe('ViewModel', () => {
 
   // test('14_watch_multidimensional_array', done => {
   //   const vm = new ViewModel({
-  //     data: function() {
+  //     data: function () {
   //       return {
   //         numbers: [
   //           [0, 0, 0, 2],

@@ -10,14 +10,14 @@ export default {
   // vm-on:|@
   on: {
     priority: 7,
-    implement(vm, node, name, expOrFn) {
+    implement (vm, node, name, expOrFn) {
       if (expOrFn.indexOf('(') === -1) {
         node['on' + name] = vm[expOrFn].bind(vm)
       } else if (argRe.test(expOrFn)) {
         const [fn, t] = expOrFn.split('(')
         const args = t.slice(0, -1).split(',')
 
-        node['on' + name] = function(e) {
+        node['on' + name] = function (e) {
           const realArgs = args.map(arg => {
             // 若可以deepGet deepGet优先级更高
             const val = deepGet(vm, arg) ? deepGet(vm, arg) : arg.trim()
@@ -29,7 +29,7 @@ export default {
         }
       }
     },
-    update(vm, node, name, newVal, oldVal) {
+    update (vm, node, name, newVal, oldVal) {
 
     }
   },
@@ -37,11 +37,11 @@ export default {
   // vm-bind:|:
   bind: {
     priority: 8,
-    implement(vm, node, name, expOrFn) {
+    implement (vm, node, name, expOrFn) {
       const value = deepGet(vm, expOrFn) === undefined ? expOrFn : deepGet(vm, expOrFn)
       node.setAttribute(name, value)
     },
-    update(vm, node, name, newVal, oldVal) {
+    update (vm, node, name, newVal, oldVal) {
       node.setAttribute(name, newVal)
 
       // 解决:style 与 vm-show的冲突
@@ -55,13 +55,13 @@ export default {
   // vm-model
   model: {
     priority: 10,
-    implement(vm, node, name, expOrFn) {
+    implement (vm, node, name, expOrFn) {
       node.value = deepGet(vm, expOrFn)
-      node.oninput = function() {
+      node.oninput = function () {
         deepSet(vm, expOrFn, node.value)
       }
     },
-    update(vm, node, name, newVal, oldVal) {
+    update (vm, node, name, newVal, oldVal) {
       node.value = newVal
     }
   },
@@ -69,10 +69,10 @@ export default {
   // {{}}
   textNode: {
     priority: 1,
-    implement(vm, textNode, variable) {
+    implement (vm, textNode, variable) {
       textNode.nodeValue = textNode.nodeValue.replace(`{{${variable}}}`, deepGet(vm, variable))
     },
-    update(vm, newVal, oldVal, textNode, variable, rawValue) {
+    update (vm, newVal, oldVal, textNode, variable, rawValue) {
       // 更新修改的变量
       textNode.nodeValue = rawValue.replace(`{{${variable}}}`, newVal)
 
@@ -94,7 +94,7 @@ export default {
   // vm-for
   for: {
     priority: 20,
-    implement(vm, node, expOrFn) {
+    implement (vm, node, expOrFn) {
       // in和of含义一样
       // 不同于数组的for in和for of
       const re1 = /(.*) (?:in|of) (.*)/
@@ -131,7 +131,7 @@ export default {
       }
     },
     // 将v-for节点克隆 再根据值的长度克隆进去再compile渲染 如果值变更 则将之前的节点全部删除 重新渲染
-    update(vm, node, exp, value, indexKey, valueKey, anchor, frag) {
+    update (vm, node, exp, value, indexKey, valueKey, anchor, frag) {
       if (value._oldLength) {
         for (let i = 0; i < value._oldLength; i++) {
           // 移除之前的节点
@@ -225,7 +225,7 @@ export default {
   // vm-show
   show: {
     priority: 0,
-    implement(vm, node, name, expOrFn) {
+    implement (vm, node, name, expOrFn) {
       node.__originalDisplay = node.style.display
       if (!deepGet(vm, expOrFn)) {
         node.style.display = 'none'
@@ -234,7 +234,7 @@ export default {
         node._show = true
       }
     },
-    update(vm, node, name, newVal, oldVal) {
+    update (vm, node, name, newVal, oldVal) {
       if (!newVal) {
         node.style.display = 'none'
         node._show = false
