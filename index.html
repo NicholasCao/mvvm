@@ -38,8 +38,8 @@
     <p vm-for="(val, key) in b" :class="val" @click="clickB($event, val, key)">
       b[{{key}}]: {{val}}
     </p>
-    <p vm-for="(val, key) in b">
-      <span :class="val" @click="clickB($event, val, key)"> b[{{key}}]: {{val}} </span>
+    <p vm-for="(val, ab) in aba">
+      <span :class="abc[ab]"> {{ val }} </span>
     </p>
   </div>
 </body>
@@ -50,6 +50,8 @@
       style: '',
       a: [0, 1, 2],
       b: ['a', 'b', 'c'],
+      aba: [0, 1, 2],
+      abc: ['a', 'b', 'c'],
       user: {
         name: 'a',
         a: 10,

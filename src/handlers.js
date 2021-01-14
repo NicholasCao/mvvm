@@ -139,8 +139,6 @@ export default {
         }
       }
       let cloneNode
-      // let re1
-      // let re2
       let html
 
       if (typeof value !== 'object') {
@@ -155,23 +153,23 @@ export default {
         if (valueKey) {
           const re1 = new RegExp(`{{\\s*${valueKey}\\s*}}`, 'g')
           html = html.replace(re1, value[key])
-          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=('|").*(${valueKey}).*('|")`)
-          let matchs
-          while (html.match(re2)) {
-            matchs = html.match(re2)
-            const directive = matchs[0].replace(matchs[3], `${exp}[${key}]`)
+          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=.*\\W(${valueKey})\\W`)
+          let matchs = html.match(re2)
+          while (matchs) {
+            const directive = matchs[0].replace(new RegExp(`(\\W)(${valueKey})(\\W)`), `$1${exp}[${key}]$3`)
             html = html.replace(matchs[0], directive)
+            matchs = html.match(re2)
           }
         }
         if (indexKey) {
           const re1 = new RegExp(`{{\\s*${indexKey}\\s*}}`, 'g')
           html = html.replace(re1, key)
-          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=('|").*(${indexKey}).*('|")`)
-          let matchs
-          while (html.match(re2)) {
-            matchs = html.match(re2)
-            const directive = matchs[0].replace(matchs[3], key)
+          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=.*\\W(${indexKey})\\W`)
+          let matchs = html.match(re2)
+          while (matchs) {
+            const directive = matchs[0].replace(new RegExp(`(\\W)(${indexKey})(\\W)`), `$1${key}$3`)
             html = html.replace(matchs[0], directive)
+            matchs = html.match(re2)
           }
         }
 

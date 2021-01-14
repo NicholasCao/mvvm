@@ -275,7 +275,36 @@ describe('ViewModel', () => {
     expect(result[2]).toBe('0')
   })
 
-  test('08_2_deep_compile_on_bind_in_vm-for', () => {
+  test('08_2_compile_on_bind_in_vm-for', () => {
+    let result
+    const options = {
+      data: {
+        abc: ['a', 'b', 'c'],
+        abd: ['a', 'b', 'd']
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p vm-for="(val, ab) in abc">
+        <span :class="abd[ab]"> {{ val }} </span>
+      </p>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p>
+        <span class="a"> a </span>
+      </p><p>
+        <span class="b"> b </span>
+      </p><p>
+        <span class="d"> c </span>
+      </p>
+    `)
+  })
+
+  test('08_3_deep_compile_on_bind_in_vm-for', () => {
     let result
     const options = {
       data: {
