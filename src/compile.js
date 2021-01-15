@@ -70,7 +70,7 @@ Compile.prototype = {
 
         const update = (newVal, oldVal) => {
           // update(vm, node, exp, value, indexKey, valueKey, anchor, frag)
-          handle.update(vm, e.node, e.expOrFn, newVal, obj.indexKey, obj.valueKey, obj.anchor, obj.frag)
+          handle.update(vm, e.node, obj.exp, newVal, obj.indexKey, obj.valueKey, obj.anchor, obj.frag)
         }
         // update(obj.value)
         new Watcher(this.vm, obj.exp, update)

@@ -239,6 +239,40 @@ describe('ViewModel', () => {
     `)
   })
 
+  test('07_2_compile_in_vm-for_with_new_array', () => {
+    const options = {
+      data: {
+        cities: ['ShangHai', 'ShenZhen']
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <ul vm-for="(city, index) in cities">
+        <li> cities[{{index}}]: {{city}} </li>
+      </ul>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <ul>
+        <li> cities[0]: ShangHai </li>
+      </ul><ul>
+        <li> cities[1]: ShenZhen </li>
+      </ul>
+    `)
+
+    vm.cities = ['Beijing', 'ShangHai']
+    expect(vm.$el.innerHTML).toBe(`
+      <ul>
+        <li> cities[0]: Beijing </li>
+      </ul><ul>
+        <li> cities[1]: ShangHai </li>
+      </ul>
+    `)
+  })
+
   test('08_compile_on_bind_in_vm-for', () => {
     let result
     const options = {

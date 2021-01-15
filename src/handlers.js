@@ -132,12 +132,13 @@ export default {
     },
     // 将v-for节点克隆 再根据值的长度克隆进去再compile渲染 如果值变更 则将之前的节点全部删除 重新渲染
     update (vm, node, exp, value, indexKey, valueKey, anchor, frag) {
-      if (value._oldLength) {
-        for (let i = 0; i < value._oldLength; i++) {
+      if (node._vmForNumber) {
+        for (let i = 0; i < node._vmForNumber; i++) {
           // 移除之前的节点
           remove(anchor.previousElementSibling)
         }
       }
+      node._vmForNumber = value.length
       let cloneNode
       let html
 
