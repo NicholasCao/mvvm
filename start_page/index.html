@@ -10,8 +10,8 @@
 
 <body>
   <div id="app">
-    <div id="greetingBox">
-      <span id="greeting" :style="greetingStyle">
+    <div id="greetingBox" :style="greetingStyle">
+      <span id="greeting">
         {{ greeting }}
       </span>
     </div>
@@ -25,14 +25,21 @@
       </video>
       <img vm-show="isImgBg" :src="bgLink":style="bgStyle" class="bg">
       </img>
-      <div class="cover" :style="coverStyle" @click="blur"></div>
+      <div class="cover" :style="coverStyle" @click="changeStatus"></div>
     </div>
 
-    <div class="timeBox">
-      <h1 class="time"> {{ time }} </h1>
-    </div>
-    <input type="text" class="input" size="30" placeholder="Search" autocomplete="off" 
-      @keydown="input" @click="search" @blur="blur" vm-model="word" />
+    <main>
+      <div class="timeBox">
+        <h1 class="time"> {{ time }} </h1>
+      </div>
+      <input type="text" class="input" size="30" placeholder="Search" autocomplete="off" 
+        @keydown="input" @click="focus($event)" vm-model="word" />
+      <div class="suggestionContainer">
+        <div vm-for="(sug, index) in suggestion" @click="search(sug)">
+          {{ sug }}
+        </div>
+      </div>
+    </main>
 
     <div class="popUp" id="setting" :style="settingStyle">
       <h2> 设置 </h2>
@@ -61,6 +68,7 @@
 
     <div id="he-plugin-simple"></div>
   </div>
+  <script type="text/javascript"></script>
   <script>
     const WIDGET = {
       CONFIG: {
@@ -86,7 +94,8 @@
       }
     }
   </script>
-  <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
+  <!-- <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/axios"></script>
   <script type="text/javascript" src="../dist/vm.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>

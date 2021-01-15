@@ -34,13 +34,19 @@ const vm = new VM({
     bgStyle: '',
     searchUrl: 'https://www.baidu.com/s?ie=utf-8&word=',
     time: '',
-    word: ''
+    word: '',
+    suggestion: []
   },
   methods: {
-    search () {
+    focus (e) {
+      e.stopPropagation()
       this.status = 'searching'
     },
-    blur () {
+    changeStatus () {
+      if (this.status === 'searching') {
+        this.suggestion = []
+        this.word = ''
+      }
       this.status = 'nothing'
     },
     setting () {
@@ -48,8 +54,13 @@ const vm = new VM({
     },
     input (e) {
       if (e.keyCode === 13) {
-        window.open(this.searchUrl + this.word)
+        this.search(this.word)
       }
+    },
+    search (word) {
+      this.suggestion = []
+      this.word = ''
+      window.open(this.searchUrl + word)
     },
     changeBg (index) {
       // hangdle '0+6'
@@ -64,11 +75,11 @@ const vm = new VM({
         this.coverStyle = ''
         this.bgStyle = ''
       } else if (val === 'searching') {
-        this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
+        this.coverStyle = 'background-color: rgba(0,0,0,0.2);'
         this.bgStyle = 'transform: scale(1.1);'
       } else if (val === 'setting') {
         this.settingStyle = 'opacity: 1; height: 500px;'
-        this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
+        this.coverStyle = 'background-color: rgba(0,0,0,0.2);'
       }
     },
     bgIndex (val, oldVal) {
@@ -80,13 +91,14 @@ const vm = new VM({
         this.isLiveBg = true
         this.liveBgLink = `${bgLiveBaseUrl}${val - 5}.mp4`
         this.isImgBg = false
-        this.bgLink = ''
       } else {
         this.isLiveBg = false
-        this.liveBgLink = ''
         this.isImgBg = true
         this.bgLink = `${bgBaseUrl}${val + 1}.jpg`
       }
+    },
+    word (val) {
+      if (val) jsonp(suggestionUrl + val)
     }
   }
 })
@@ -127,6 +139,25 @@ window.onfocus = () => {
 
 window.onblur = () => {
   document.querySelector('video').pause()
+}
+
+// 使用jsonp解决跨域
+function jsonp (url) {
+  const JSONP = document.createElement('script')
+  JSONP.type = 'text/javascript'
+  JSONP.src = url
+  document.getElementsByTagName('head')[0].appendChild(JSONP)
+  setTimeout(() => {
+    document.getElementsByTagName('head')[0].removeChild(JSONP)
+  }, 500)
+}
+
+// 伪装一个baidu对象
+// 接收baidu的jsonp
+window.baidu = {
+  sug (val) {
+    vm.suggestion = val.s
+  }
 }
 
 // console
