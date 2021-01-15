@@ -276,7 +276,6 @@ describe('ViewModel', () => {
   })
 
   test('08_2_compile_on_bind_in_vm-for', () => {
-    let result
     const options = {
       data: {
         abc: ['a', 'b', 'c'],

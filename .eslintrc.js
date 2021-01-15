@@ -16,6 +16,7 @@ module.exports = {
     'no-new-func': 0,
     'no-proto': 0,
     // 'space-before-function-paren': ['error', 'never'],
+    'no-eval': 0,
     'arrow-parens': ['error', 'as-needed'],
     'object-curly-spacing': ['error', 'always'],
     'comma-dangle': ['error', 'never'],

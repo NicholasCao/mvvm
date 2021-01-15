@@ -26,7 +26,8 @@ const vm = new VM({
     isImgBg: true,
     bgIndex: null,
     bgsPewview: ['bgPreview1', 'bgPreview2', 'bgPreview3', 'bgPreview4', 'bgPreview5', 'bgPreview6'],
-    bgPreviewClass: ['bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview'],
+    bgPreviewClass: ['bgPreview', 'bgPreview', 'bgPreview', 'bgPreview',
+      'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview'],
     bgsLivePewview: ['bgPreviewLive1', 'bgPreviewLive2'],
     bgLink: '',
     liveBgLink: '',
@@ -56,7 +57,7 @@ const vm = new VM({
     }
   },
   watch: {
-    status(val, oldVal) {
+    status (val, oldVal) {
       if (oldVal === 'setting') this.settingStyle = ''
 
       if (val === 'nothing') {
@@ -70,7 +71,7 @@ const vm = new VM({
         this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
       }
     },
-    bgIndex(val, oldVal) {
+    bgIndex (val, oldVal) {
       localStorage.setItem('start_page_bgIndex', val)
 
       if (oldVal !== null) this.$set('bgPreviewClass', oldVal, 'bgPreview')
