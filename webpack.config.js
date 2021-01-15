@@ -2,6 +2,26 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
+let plugins
+if (process.env.NODE_ENV === 'development') {
+  plugins = [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ]
+} else {
+  plugins = [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      inject: true
+    })
+  ]
+}
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -23,12 +43,5 @@ module.exports = {
     open: true
   },
   devtool: 'inline-source-map',
-  plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  plugins
 }
