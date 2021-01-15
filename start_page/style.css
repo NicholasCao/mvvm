@@ -10,10 +10,9 @@ body {
 }
 
 #greetingBox {
-  position: absolute;
-  top: 50px;
-  left: calc(50% - 150px);
-  width: 300px;
+  display: flex;
+  justify-content:center;
+  margin-top: 50px;
   text-align: center;
 }
 
@@ -31,21 +30,31 @@ body {
   box-shadow: rgba(0,0,0,0.05) 0 10px 20px;
 }
 
-.icon {
+.menu {
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  animation: fadeIn .3s ease;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.menu .icon {
   cursor: pointer;
   width: 25px;
   height: 25px;
   transition: all 0.3s;
   background: transparent;
 }
-.icon path {
-  fill: rgba(255,255,255,0.35);;
+.menu .icon path {
+  fill: rgba(255,255,255,0.5);;
 }
-.icon:hover {
+.menu .icon:hover {
   transform: rotate(60deg);
 }
-.icon:hover path {
-  fill: rgba(255,255,255,0.65);
+.menu .icon:hover path {
+  fill: rgba(255,255,255,0.8);
 }
 
 .bg {
@@ -159,6 +168,145 @@ body {
 .input:focus::placeholder {
 	color: transparent;
 	text-shadow: none;
+}
+
+.popUp {
+  opacity: 0;
+  position: absolute;
+  z-index: 100;
+  width: 600px;
+  height: 0;
+  top: calc(50% - 250px);
+  left: calc(50% - 300px);
+  background-color: rgba(254, 254, 254, 1);
+  box-shadow: 0 6px 20px 5px rgba(40, 120, 255, 0.1), 0 16px 24px 2px rgba(0, 0, 0, 0.05);
+  /* background-image: linear-gradient(to bottom right, #FDF3F5, #B5D1E2); */
+  font-size: small;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: opacity .4s;
+}
+.popUp h2 {
+  position: relative;
+  left: 70px;
+  top: 35px;
+  font-size: 25px;
+  font-weight: normal;
+  font-family: "Microsoft Yahei", Helvetica, sans-serif, "等线";
+  /* color: var(--txt-b-pure);  */
+}
+.popUp .content {
+  position: relative;
+  left: 70px;
+  top: 60px;
+  height: 350px;
+  width: 460px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.popUp .content h3 {
+  font-size: 18px;
+  font-weight: normal;
+  font-family: "Microsoft Yahei", Helvetica, sans-serif, "等线";
+}
+.popUp .content h4 {
+  position: relative;
+  color: rgba(0,0,0,0.5);
+  margin-top: 10px;
+}
+.popUp .content .bgPreviewContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.popUp .bgPreviewContainer .bgPreviewBox {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  margin-right: 6px;
+  left: 0;
+  width: 135px;
+  height: 90px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.popUp .bgPreviewContainer .bgPreviewBox .bgPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  transition: all 0.25s;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 3px 5px 2px rgba(110, 121, 177, 0.1);
+}
+#bgPreview1 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_1.jpg);
+}
+#bgPreview2 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_2.jpg);
+}
+#bgPreview3 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_3.jpg);
+}
+#bgPreview4 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_4.jpg);
+}
+#bgPreview5 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_5.jpg);
+}
+#bgPreview6 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_6.jpg);
+}
+#bgPreviewLive1 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Live_1.jpg);
+}
+#bgPreviewLive2 {
+  background-image: url(https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Live_2.jpg);
+}
+.√ {
+  z-index: 100;
+  width: 36px;
+  height: 36px;
+}
+.√ path{
+  fill: transparent;
+}
+.bgPreviewMask {
+  position: absolute;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  transition: all 0.25s;
+}
+.bgPreviewBox .selected {
+  transform: scale(1) !important;
+}
+.bgPreviewBox .selected .bgPreviewMask {
+  background-color: rgba(0,0,0,0.5) !important;
+}
+.bgPreviewBox .selected .√ path {
+  fill: white;
+}
+.bgPreview:hover {
+  transform: scale(1.1);
+}
+.bgPreview:hover .bgPreviewMask {
+  background-color: rgba(0,0,0,0.2);
+}
+
+
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+.popUp ::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,.1);
+  border-radius: 3px;
 }
 
 .wv-top-backdrop {

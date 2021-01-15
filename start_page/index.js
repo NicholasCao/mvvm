@@ -1,4 +1,9 @@
-// const baseUrl = 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/'
+// https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_1.jpg
+const bgBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_'
+// https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live_Wallpaper_1.mp4
+const bgLiveBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live_Wallpaper_'
+
+const suggestionUrl = 'http://suggestion.baidu.com/su?wd='
 
 const getTime = function () {
   const d = new Date()
@@ -12,52 +17,80 @@ const getTime = function () {
 const vm = new VM({
   el: '#app',
   data: {
+    status: 'nothing', // nothing searching setting
+    settingStyle: '',
     greeting: '',
     greetingStyle: '',
     coverStyle: '',
     isLiveBg: false,
     isImgBg: true,
-    bgIndex: 1,
-    bgLink: 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/bg1.jpg',
-    liveBgLink: 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/bg_live_1.mp4',
+    bgIndex: null,
+    bgsPewview: ['bgPreview1', 'bgPreview2', 'bgPreview3', 'bgPreview4', 'bgPreview5', 'bgPreview6'],
+    bgPreviewClass: ['bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview'],
+    bgsLivePewview: ['bgPreviewLive1', 'bgPreviewLive2'],
+    bgLink: '',
+    liveBgLink: '',
     bgStyle: '',
     searchUrl: 'https://www.baidu.com/s?ie=utf-8&word=',
-    suggestionUrl: 'http://suggestion.baidu.com/su?wd=',
     time: '',
     word: ''
   },
   methods: {
-    change () {
-      this.isLiveBg = !this.isLiveBg
-      this.isImgBg = !this.isImgBg
-      // if (this.isLiveBg) this.liveBgLink = 'https://cdn.jsdelivr.net/gh/NicholasCao/assets/start_page/bg_live_1.mp4'
-      // this.bgIndex++
-      // if (this.bgIndex > bgNum) {
-      //   this.bgIndex = 1
-      // }
-      // this.bgLink = `${baseUrl}bg${this.bgIndex}.jpg`
-    },
     search () {
-      this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
-      this.bgStyle = 'transform: scale(1.1);'
+      this.status = 'searching'
     },
     blur () {
-      this.coverStyle = ''
-      this.bgStyle = ''
+      this.status = 'nothing'
+    },
+    setting () {
+      this.status = 'setting'
     },
     input (e) {
       if (e.keyCode === 13) {
         window.open(this.searchUrl + this.word)
       }
+    },
+    changeBg (index) {
+      // hangdle '0+6'
+      this.bgIndex = eval(index)
+    }
+  },
+  watch: {
+    status(val, oldVal) {
+      if (oldVal === 'setting') this.settingStyle = ''
+
+      if (val === 'nothing') {
+        this.coverStyle = ''
+        this.bgStyle = ''
+      } else if (val === 'searching') {
+        this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
+        this.bgStyle = 'transform: scale(1.1);'
+      } else if (val === 'setting') {
+        this.settingStyle = 'opacity: 1; height: 500px;'
+        this.coverStyle = 'background-color: rgba(0,0,0,0.3);'
+      }
+    },
+    bgIndex(val, oldVal) {
+      localStorage.setItem('start_page_bgIndex', val)
+
+      if (oldVal !== null) this.$set('bgPreviewClass', oldVal, 'bgPreview')
+      this.$set('bgPreviewClass', val, 'bgPreview selected')
+      if (val >= 6) {
+        this.isLiveBg = true
+        this.liveBgLink = `${bgLiveBaseUrl}${val - 5}.mp4`
+        this.isImgBg = false
+        this.bgLink = ''
+      } else {
+        this.isLiveBg = false
+        this.liveBgLink = ''
+        this.isImgBg = true
+        this.bgLink = `${bgBaseUrl}${val + 1}.jpg`
+      }
     }
   }
-  // },
-  // watch: {
-  //   isLiveBg() {
-
-  //   }
-  // }
 })
+
+vm.bgIndex = Number(localStorage.getItem('start_page_bgIndex')) || 0
 
 const now = new Date()
 const hour = now.getHours()
@@ -87,21 +120,14 @@ const secInterval = setInterval(() => {
 }, 1000)
 
 // 性能优化
-// window.onfocus = () => {
-//   if (vm.isLiveBg) document.querySelector('video').play()
-// }
+window.onfocus = () => {
+  if (vm.isLiveBg) document.querySelector('video').play()
+}
 
-// window.onblur = () => {
-//   document.querySelector('video').pause()
-// }
+window.onblur = () => {
+  document.querySelector('video').pause()
+}
 
 // console
-console.log('Welcome To My Math Class')
-let s = ''
-for (let x = 1; x <= 9; x++) {
-  for (let y = 1; y <= x; y++) {
-    s = s + y + 'x' + x + '=' + x * y + ' '
-  }
-  s = s + '\n'
-}
-console.log(s)
+console.log('网页仅用于学习用途')
+console.log('网页样式来自%cLime Start Page %c青柠起始页 https://a.maorx.cn/', 'color: #70C000;', 'color: #000;')
