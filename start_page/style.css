@@ -395,6 +395,10 @@ main {
   border-radius: 3px;
 }
 
+/* 和风天气 */
+#he-plugin-simple {
+  z-index: 100;
+}
 .wv-top-backdrop {
   display: none !important;
 }
@@ -404,8 +408,6 @@ main {
 .wv-lt-location a {
   display: none !important;
 }
-
-/* 和风天气 */
 /* .wv-lt-refresh a {
   display: none !important;
 } */
