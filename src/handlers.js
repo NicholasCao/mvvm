@@ -56,13 +56,27 @@ export default {
   model: {
     priority: 10,
     implement (vm, node, name, expOrFn) {
-      node.value = deepGet(vm, expOrFn)
-      node.oninput = function () {
-        deepSet(vm, expOrFn, node.value)
+      if (node.tagName !== 'INPUT') return
+
+      const val = deepGet(vm, expOrFn)
+      // 仅支持text 和 radio
+      if (node.type === 'text') {
+        node.value = val
+        node.oninput = function () {
+          deepSet(vm, expOrFn, node.value)
+        }
+      } else if (node.type === 'radio') {
+        node.checked = node.value === val
+        node.onchange = function () {
+          deepSet(vm, expOrFn, node.value)
+        }
       }
     },
     update (vm, node, name, newVal, oldVal) {
-      node.value = newVal
+      if (node.tagName !== 'INPUT') return
+
+      if (node.type === 'text') node.value = newVal
+      if (node.type === 'radio') node.checked = node.value === newVal
     }
   },
 

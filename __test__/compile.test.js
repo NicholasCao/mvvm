@@ -138,6 +138,39 @@ describe('ViewModel', () => {
     expect(input.value).toBe('3')
   })
 
+  test('04_2_model_in_radio', () => {
+    const options = {
+      data: { radio: '' }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p> {{ radio }} </p>
+      <input vm-model="radio" value="a" type="radio" name="radio"></input>
+      <input vm-model="radio" value="b" type="radio" name="radio"></input>
+    `
+
+    new Compile(vm, vm.$el)
+
+    const input = vm.$el.querySelector('input')
+    input.click()
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p> a </p>
+      <input vm-model="radio" value="a" type="radio" name="radio">
+      <input vm-model="radio" value="b" type="radio" name="radio">
+    `)
+    expect(vm.radio).toBe('a')
+
+    vm.$el.getElementsByTagName('input')[1].click()
+    expect(vm.$el.innerHTML).toBe(`
+      <p> b </p>
+      <input vm-model="radio" value="a" type="radio" name="radio">
+      <input vm-model="radio" value="b" type="radio" name="radio">
+    `)
+    expect(vm.radio).toBe('b')
+  })
+
   test('05_for', () => {
     const options = {
       data: {
