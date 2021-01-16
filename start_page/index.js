@@ -5,6 +5,12 @@ const bgLiveBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live
 
 const suggestionUrl = 'http://suggestion.baidu.com/su?wd='
 
+const searchUrl = {
+  '百度': 'https://www.baidu.com/s?ie=utf-8&word=',
+  '必应': 'https://cn.bing.com/search?q=',
+  '谷歌': 'https://www.google.com/search?q='
+}
+
 const getTime = function () {
   const d = new Date()
   let h = d.getHours()
@@ -32,7 +38,10 @@ const vm = new VM({
     bgLink: '',
     liveBgLink: '',
     bgStyle: '',
-    searchUrl: 'https://www.baidu.com/s?ie=utf-8&word=',
+    searchEngine: '',
+    searchEngines: ['百度', '必应', '谷歌'],
+    searchEnginesClass: ['', '', ''],
+    searchUrl: '',
     time: '',
     word: '',
     suggestion: []
@@ -61,6 +70,9 @@ const vm = new VM({
       this.suggestion = []
       this.word = ''
       window.open(this.searchUrl + word)
+    },
+    changeSearchEngine (searchEngine) {
+      this.searchEngine = searchEngine
     },
     changeBg (index) {
       // hangdle '0+6'
@@ -99,11 +111,22 @@ const vm = new VM({
     },
     word (val) {
       if (val) jsonp(suggestionUrl + val)
+    },
+    searchEngine (val) {
+      localStorage.setItem('start_page_searchEngine', val)
+
+      let index = this.searchEngines.indexOf(val)
+      let searchEnginesClass = ['', '', '']
+      searchEnginesClass[index] = 'checked'
+      this.searchEnginesClass = searchEnginesClass
+
+      this.searchUrl = searchUrl[val]
     }
   }
 })
 
 vm.bgIndex = Number(localStorage.getItem('start_page_bgIndex')) || 0
+vm.searchEngine = localStorage.getItem('start_page_searchEngine') || '百度'
 
 const now = new Date()
 const hour = now.getHours()
@@ -132,7 +155,10 @@ const secInterval = setInterval(() => {
   }
 }, 1000)
 
-// 性能优化
+// 禁用右键
+document.oncontextmenu = () => false
+
+// 动态壁纸性能优化
 window.onfocus = () => {
   if (vm.isLiveBg) document.querySelector('video').play()
 }

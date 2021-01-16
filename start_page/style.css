@@ -34,7 +34,7 @@ body {
   z-index: 100;
   position: fixed;
   top: 25px;
-  right: 45px;
+  right: 35px;
   animation: fadeIn .3s ease;
 }
 @keyframes fadeIn {
@@ -45,13 +45,18 @@ body {
   cursor: pointer;
   width: 25px;
   height: 25px;
+  border-radius: 50%;
   transition: all 0.3s;
   background: transparent;
+  margin-right: 18px;
 }
 .menu .icon path {
   fill: rgba(255,255,255,0.5);
 }
-.menu .icon:hover {
+.menu .note:hover {
+  border: 1px solid transparent;
+}
+.menu .setting:hover {
   transform: rotate(60deg);
 }
 .menu .icon:hover path {
@@ -126,7 +131,6 @@ main {
   z-index: 100;
   width: 230px;
   outline: none;
-  /* border: 1px solid rgba(255,255,255,0.3); */
   border: none;
   padding: 13px 15px;
   border-radius: 30px;
@@ -223,17 +227,74 @@ main {
 .popUp .content {
   position: relative;
   left: 70px;
-  top: 60px;
+  top: 50px;
   height: 350px;
   width: 460px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
 .popUp .content h3 {
+  margin-top: 10px;
   font-size: 18px;
   font-weight: normal;
   font-family: "Microsoft Yahei", Helvetica, sans-serif, "等线";
 }
+.radio {
+  margin: 10px 0;
+  color: #606266;
+  font-weight: 500;
+  line-height: 1;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+  outline: none;
+  font-size: 14px;
+}
+.radio .radio-inner {
+  border: 1px solid #dcdfe6;
+  border-radius: 100%;
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  box-sizing: border-box;
+}
+.radio div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
+}
+.checked .radio-inner {
+  border-color: #409eff;
+  background: #409eff;
+}
+.radio .radio-inner:after {
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  background-color: #fff;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  transition: transform .15s ease-in;
+}
+.checked .radio-inner:after {
+  transform: translate(-50%,-50%) scale(1);
+}
+.radio .radio-label {
+  font-size: 14px;
+  padding-left: 8px;
+}
+.checked .radio-label {
+  color: #409eff;
+}
+
 .popUp .content h4 {
   position: relative;
   color: rgba(0,0,0,0.5);
