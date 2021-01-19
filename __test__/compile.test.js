@@ -88,10 +88,10 @@ describe('ViewModel', () => {
 
   test('02_2_bind_with_expression', () => {
     const options = {
-      data: { 
+      data: {
         age: 18,
         index: 1
-      },
+      }
     }
     const vm = new ViewModel(options)
     vm.$el = document.createElement('div')

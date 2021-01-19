@@ -1,4 +1,4 @@
-import { compileExpression, noop, parseExpression } from "../src/expression"
+import { compileExpression, noop, parseExpression } from '../src/expression.js'
 
 describe('expression', () => {
   test('100_parseExpression_error', () => {

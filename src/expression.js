@@ -18,9 +18,9 @@ export function noop () {
 function makeGetterFn (exp) {
   const body = isSimplePath(exp) && exp.indexOf('[') < 0
   // optimized super simple getter
-  ? 'vm.' + exp
-  // dynamic getter
-  : compileExpression(exp)
+    ? 'vm.' + exp
+    // dynamic getter
+    : compileExpression(exp)
 
   try {
     return new Function('vm', 'return ' + body + ';')
@@ -32,9 +32,9 @@ function makeGetterFn (exp) {
 function makeSetterFn (exp) {
   const body = isSimplePath(exp) && exp.indexOf('[') < 0
   // optimized super simple setter
-  ? 'vm.' + exp
-  // dynamic setter
-  : compileExpression(exp)
+    ? 'vm.' + exp
+    // dynamic setter
+    : compileExpression(exp)
 
   try {
     return new Function('vm, value', body + '= value' + ';')
