@@ -1,7 +1,7 @@
 import observe from './observer.js'
 import Compile from './compile.js'
 import Watcher from './watcher.js'
-import { deepGet, isObject } from './utils.js'
+import { isObject } from './utils.js'
 
 // ViewModel
 export default function VM (options) {
@@ -78,19 +78,19 @@ VM.prototype = {
   },
 
   $watch (variable, callback) {
-    const val = deepGet(this, variable)
+    const watcher = new Watcher(this, variable, callback)
+    const val = watcher.value
 
-    // 对象则递归watch
+    // // 对象则递归watch
     if (isObject(val) && !Array.isArray(val)) {
       for (const key in val) {
         this.$watch(`${variable}.${key}`, callback)
       }
-    } else {
-      new Watcher(this, variable, callback)
     }
   },
 
   // 当为对象添加属性或修改数组的值时可用这个方法 能实时更新
+  // 暂不支持复杂的key 如: vm.a.b.c = 'xxx'
   $set (obj, key, val) {
     if (!this[obj]) return
 

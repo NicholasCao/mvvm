@@ -115,8 +115,8 @@ const vm = new VM({
     searchEngine (val) {
       localStorage.setItem('start_page_searchEngine', val)
 
-      let index = this.searchEngines.indexOf(val)
-      let searchEnginesClass = ['', '', '']
+      const index = this.searchEngines.indexOf(val)
+      const searchEnginesClass = ['', '', '']
       searchEnginesClass[index] = 'checked'
       this.searchEnginesClass = searchEnginesClass
 

@@ -31,6 +31,33 @@ describe('ViewModel', () => {
       <button @click="add">add</button>
     `)
   })
+  test('01_2_on_with_argments', () => {
+    let result
+    const options = {
+      data: { count: 1 },
+      methods: {
+        click (...args) {
+          result = args
+        }
+      }
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <p @click="click($event, 'a', count, 0)"> {{ count }} </p>
+    `
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <p @click="click($event, 'a', count, 0)"> 1 </p>
+    `)
+
+    vm.$el.querySelector('p').click()
+    expect(result[0] instanceof MouseEvent).toBe(true)
+    expect(result[1]).toBe('a')
+    expect(result[2]).toBe(1)
+    expect(result[3]).toBe(0)
+  })
 
   test('02_bind', () => {
     const options = {
@@ -56,6 +83,28 @@ describe('ViewModel', () => {
     vm.hide()
     expect(vm.$el.innerHTML).toBe(`
       <div style="display: none">1</div>
+    `)
+  })
+
+  test('02_2_bind_with_expression', () => {
+    const options = {
+      data: { 
+        age: 18,
+        index: 1
+      },
+    }
+    const vm = new ViewModel(options)
+    vm.$el = document.createElement('div')
+    vm.$el.innerHTML = `
+      <div :class=" age <= 18 ? 'young' : 'old' "></div>
+      <div :class=" 'bg' + (index+1)"></div>
+    `
+
+    new Compile(vm, vm.$el)
+
+    expect(vm.$el.innerHTML).toBe(`
+      <div class="young"></div>
+      <div class="bg2"></div>
     `)
   })
 
@@ -125,7 +174,7 @@ describe('ViewModel', () => {
       dataTransfer: null,
       isComposing: false
     })
-    input.value = 2
+    input.value = '2'
     input.dispatchEvent(e)
 
     expect(vm.$el.innerHTML).toBe(`
@@ -136,39 +185,6 @@ describe('ViewModel', () => {
 
     vm.add()
     expect(input.value).toBe('3')
-  })
-
-  test('04_2_model_in_radio', () => {
-    const options = {
-      data: { radio: '' }
-    }
-    const vm = new ViewModel(options)
-    vm.$el = document.createElement('div')
-    vm.$el.innerHTML = `
-      <p> {{ radio }} </p>
-      <input vm-model="radio" value="a" type="radio" name="radio"></input>
-      <input vm-model="radio" value="b" type="radio" name="radio"></input>
-    `
-
-    new Compile(vm, vm.$el)
-
-    const input = vm.$el.querySelector('input')
-    input.click()
-
-    expect(vm.$el.innerHTML).toBe(`
-      <p> a </p>
-      <input vm-model="radio" value="a" type="radio" name="radio">
-      <input vm-model="radio" value="b" type="radio" name="radio">
-    `)
-    expect(vm.radio).toBe('a')
-
-    vm.$el.getElementsByTagName('input')[1].click()
-    expect(vm.$el.innerHTML).toBe(`
-      <p> b </p>
-      <input vm-model="radio" value="a" type="radio" name="radio">
-      <input vm-model="radio" value="b" type="radio" name="radio">
-    `)
-    expect(vm.radio).toBe('b')
   })
 
   test('05_for', () => {
@@ -339,7 +355,7 @@ describe('ViewModel', () => {
     vm.$el.querySelector('p').click()
     expect(result[0] instanceof MouseEvent).toBe(true)
     expect(result[1]).toBe('ShangHai')
-    expect(result[2]).toBe('0')
+    expect(result[2]).toBe(0)
   })
 
   test('08_2_compile_on_bind_in_vm-for', () => {
@@ -403,7 +419,7 @@ describe('ViewModel', () => {
     vm.$el.querySelector('span').click()
     expect(result[0] instanceof MouseEvent).toBe(true)
     expect(result[1]).toBe('ShangHai')
-    expect(result[2]).toBe('0')
+    expect(result[2]).toBe(0)
   })
 
   test('09_obverse_twice', () => {

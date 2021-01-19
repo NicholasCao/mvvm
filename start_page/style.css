@@ -46,7 +46,7 @@ body {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  transition: all 0.3s;
+  transition: transform 0.3s;
   background: transparent;
   margin-right: 18px;
 }
@@ -54,7 +54,7 @@ body {
   fill: rgba(255,255,255,0.5);
 }
 .menu .note:hover {
-  border: 1px solid transparent;
+  transform: scale(0.93);
 }
 .menu .setting:hover {
   transform: rotate(60deg);

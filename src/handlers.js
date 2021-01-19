@@ -1,33 +1,24 @@
-import { deepGet, deepSet, replace, remove, insertNode } from './utils.js'
+import { replace, remove, insertNode } from './utils.js'
 import Compile from './compile.js'
-
-const braceRe1 = /{{((?:.|\n)+?)}}/g
-const braceRe2 = /[{}]/g
-const argRe = /\(.*\)$/
+import { parseExpression, isSimplePath } from './expression.js'
 
 // 针对各种指令的回调函数
 export default {
   // vm-on:|@
   on: {
     priority: 7,
-    implement (vm, node, name, expOrFn) {
-      if (expOrFn.indexOf('(') === -1) {
-        node['on' + name] = vm[expOrFn].bind(vm)
-      } else if (argRe.test(expOrFn)) {
-        const [fn, t] = expOrFn.split('(')
-        const args = t.slice(0, -1).split(',')
-
-        node['on' + name] = function (e) {
-          const realArgs = args.map(arg => {
-            // 若可以deepGet deepGet优先级更高
-            const val = deepGet(vm, arg) ? deepGet(vm, arg) : arg.trim()
-
-            return arg === '$event' ? e : val
-          })
-
-          vm[fn](...realArgs)
+    implement (vm, node, name, expression) {
+      let fn
+      if (isSimplePath(expression)) {
+        fn = parseExpression(expression).getter.call(vm, vm).bind(vm)
+      } else {
+        fn = function (e) {
+          vm.$event = e
+          parseExpression(expression).getter.call(vm, vm)
+          vm.$event = null
         }
       }
+      node['on' + name] = fn
     },
     update (vm, node, name, newVal, oldVal) {
 
@@ -37,9 +28,8 @@ export default {
   // vm-bind:|:
   bind: {
     priority: 8,
-    implement (vm, node, name, expOrFn) {
-      const value = deepGet(vm, expOrFn) === undefined ? expOrFn : deepGet(vm, expOrFn)
-      node.setAttribute(name, value)
+    implement (vm, node, name, expression) {
+
     },
     update (vm, node, name, newVal, oldVal) {
       node.setAttribute(name, newVal)
@@ -55,28 +45,21 @@ export default {
   // vm-model
   model: {
     priority: 10,
-    implement (vm, node, name, expOrFn) {
-      if (node.tagName !== 'INPUT') return
-
-      const val = deepGet(vm, expOrFn)
-      // 仅支持text 和 radio
-      if (node.type === 'text') {
-        node.value = val
+    implement (vm, node, name, expression, watcher) {
+      // 仅支持input的text 和 textarea
+      // 不适配radio select 等
+      if (node.type === 'text' || node.tagName === 'TEXTAREA') {
         node.oninput = function () {
-          deepSet(vm, expOrFn, node.value)
-        }
-      } else if (node.type === 'radio') {
-        node.checked = node.value === val
-        node.onchange = function () {
-          deepSet(vm, expOrFn, node.value)
+          watcher.set(node.value)
         }
       }
     },
     update (vm, node, name, newVal, oldVal) {
-      if (node.tagName !== 'INPUT') return
+      if (node.tagName !== 'INPUT' && node.tagName !== 'TEXTAREA') return
 
-      if (node.type === 'text') node.value = newVal
-      if (node.type === 'radio') node.checked = node.value === newVal
+      if (node.type === 'text' || node.tagName === 'TEXTAREA') {
+        node.value = newVal
+      }
     }
   },
 
@@ -84,36 +67,22 @@ export default {
   textNode: {
     priority: 1,
     implement (vm, textNode, variable) {
-      textNode.nodeValue = textNode.nodeValue.replace(`{{${variable}}}`, deepGet(vm, variable))
+
     },
-    update (vm, newVal, oldVal, textNode, variable, rawValue) {
-      // 更新修改的变量
-      textNode.nodeValue = rawValue.replace(`{{${variable}}}`, newVal)
-
-      // 处理一个textNode中多个{{ }}的情况
-      let str = textNode.nodeValue
-      if (braceRe1.test(str)) {
-        const array = str.match(braceRe1)
-
-        // 将其他{{ }} 替换
-        array.forEach(e => {
-          const variable = e.replace(braceRe2, '')
-          str = str.replace(e, deepGet(vm, variable))
-        })
-        textNode.nodeValue = str
-      }
+    update (vm, newVal, oldVal, textNode) {
+      textNode.data = newVal
     }
   },
 
   // vm-for
   for: {
     priority: 20,
-    implement (vm, node, expOrFn) {
+    implement (vm, node, expression) {
       // in和of含义一样
       // 不同于数组的for in和for of
       const re1 = /(.*) (?:in|of) (.*)/
       const re2 = /\((.*),(.*)\)/
-      const match = expOrFn.match(re1)
+      const match = expression.match(re1)
       let valueKey, indexKey
 
       // (value, key) in array
@@ -135,7 +104,6 @@ export default {
       const anchor = document.createTextNode('')
       replace(node, anchor)
 
-      this.update(vm, node, exp, deepGet(vm, exp), indexKey, valueKey, anchor, frag)
       return {
         exp,
         valueKey,
@@ -238,14 +206,8 @@ export default {
   // vm-show
   show: {
     priority: 0,
-    implement (vm, node, name, expOrFn) {
+    implement (vm, node, name, expression) {
       node.__originalDisplay = node.style.display
-      if (!deepGet(vm, expOrFn)) {
-        node.style.display = 'none'
-        node._show = false
-      } else {
-        node._show = true
-      }
     },
     update (vm, node, name, newVal, oldVal) {
       if (!newVal) {

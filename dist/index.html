@@ -9,14 +9,14 @@
 </html>
 
 <body>
-  <div id="app" :class="name">
-    <p>姓名：{{name}} user.a:{{user.a}} <span> {{age}} </span></p>
+  <div id="app">
+    <p :class="age <= 18 ? 'young':'old'">姓名：{{name}} user.a:{{user.a}} <span> {{age}} </span></p>
     <p> user.a: {{user.a}} </p>
     <p> user.c.b: {{user.c.b}} </p>
     <p>年龄：{{age}}</p>
     <p> a[0] {{a[0]}}</p>
     <p> a[1] {{a[1]}}</p>
-    <button @click="changeName">changeName</button>
+    <button @click="changeName($event, age, 'age')">changeName</button>
     <button @click="increase">年龄+1</button>
     <button @click="increase2">user.a+1</button>
     <button @click="increase3">user.c.b+1</button>
@@ -60,14 +60,15 @@
         }
       },
       age: 18,
-      name: '',
+      name: 'a',
       obj: {
         a: 1
       },
       show: true
     },
     methods: {
-      changeName() {
+      changeName(...args) {
+        console.log(args)
         this.name = '小明' + Math.random(10).toFixed(2)*100
       },
       increase() {

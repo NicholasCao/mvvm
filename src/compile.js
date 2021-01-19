@@ -1,5 +1,5 @@
 import Handlers from './handlers.js'
-import { deepGet } from './utils.js'
+import { replace } from './utils.js'
 import Watcher from './watcher.js'
 
 // 指令解析器
@@ -15,8 +15,7 @@ export default function Compile (vm, el) {
   this.modelRe = /^vm-model/
   this.forRe = /^vm-for/
   this.showRe = /^vm-show/
-  this.braceRe1 = /{{((?:.|\n)+?)}}/g
-  this.braceRe2 = /[{}]/g
+  this.braceRe = /{{((?:.|\n)+?)}}/g
 
   this.dirs = []
   this.init()
@@ -39,7 +38,7 @@ Compile.prototype = {
     this.dirs.push({
       name,
       handle,
-      expOrFn: value,
+      expression: value,
       node
     })
   },
@@ -50,50 +49,13 @@ Compile.prototype = {
     this.dirs.sort((a, b) => b.handle.priority - a.handle.priority)
 
     // 处理attribute
-    this.dirs.forEach(e => {
-      if (e.name !== 'vm-for') {
-        const handle = e.handle
-        if (handle.implement) {
-          handle.implement(vm, e.node, e.name, e.expOrFn)
-        }
-        const update = (newVal, oldVal) => {
-          handle.update(vm, e.node, e.name, newVal, oldVal)
-        }
-        // 监听attribute
-        if (e.handle !== Handlers.on && deepGet(this.vm, e.expOrFn) !== undefined) {
-          new Watcher(this.vm, e.expOrFn, update)
-        }
-      } else {
-        // vm-for
-        const handle = e.handle
-        const obj = handle.implement(vm, e.node, e.expOrFn)
-
-        const update = (newVal, oldVal) => {
-          // update(vm, node, exp, value, indexKey, valueKey, anchor, frag)
-          handle.update(vm, e.node, obj.exp, newVal, obj.indexKey, obj.valueKey, obj.anchor, obj.frag)
-        }
-        // update(obj.value)
-        new Watcher(this.vm, obj.exp, update)
-      }
+    this.dirs.forEach(dir => {
+      this.handleAttrbute(vm, dir)
     })
 
     // 处理文本节点
-    this._textNodes.forEach(e => {
-      const array = e.nodeValue.match(this.braceRe1)
-      const rawValue = e.nodeValue
-      if (array) {
-        array.forEach(str => {
-          // 去掉{{}}
-          const variable = str.replace(this.braceRe2, '')
-          Handlers.textNode.implement(vm, e, variable)
-
-          const update = (newVal, oldVal) => {
-            Handlers.textNode.update(vm, newVal, oldVal, e, variable, rawValue)
-          }
-          // 监听文本节点
-          new Watcher(vm, variable, update)
-        })
-      }
+    this._textNodes.forEach(textNode => {
+      this.handleTextNode(vm, textNode)
     })
   },
 
@@ -159,5 +121,90 @@ Compile.prototype = {
 
   compileTextNode (node) {
     this._textNodes.push(node)
+  },
+
+  handleAttrbute (vm, dir) {
+    const handle = dir.handle
+
+    if (dir.name === 'vm-for') {
+      // vm-for
+      const obj = handle.implement(vm, dir.node, dir.expression)
+
+      const update = (newVal, oldVal) => {
+        // update(vm, node, exp, value, indexKey, valueKey, anchor, frag)
+        handle.update(vm, dir.node, obj.exp, newVal, obj.indexKey, obj.valueKey, obj.anchor, obj.frag)
+      }
+      // update(obj.value)
+      const watcher = new Watcher(this.vm, obj.exp, update)
+      update(watcher.value) // 执行时先update一次
+    } else if (dir.name === 'vm-model') {
+      // vm-model
+      // 监听attributes
+      const update = (newVal, oldVal) => {
+        handle.update(vm, dir.node, dir.name, newVal, oldVal)
+      }
+      const watcher = new Watcher(this.vm, dir.expression, update, true)
+
+      handle.implement(vm, dir.node, dir.name, dir.expression, watcher)
+
+      update(watcher.value) // 执行时先update一次
+    } else {
+      if (handle.implement) {
+        handle.implement(vm, dir.node, dir.name, dir.expression)
+      }
+      // 监听attributes
+      if (dir.handle !== Handlers.on) {
+        const update = (newVal, oldVal) => {
+          handle.update(vm, dir.node, dir.name, newVal, oldVal)
+        }
+        const watcher = new Watcher(this.vm, dir.expression, update)
+        update(watcher.value) // 执行时先update一次
+      }
+    }
+  },
+
+  handleTextNode (vm, textNode) {
+    const text = textNode.wholeText
+
+    let lastIndex = 0
+    let match, index, frag
+    /* eslint-disable no-cond-assign */
+    while (match = this.braceRe.exec(text)) {
+    /* eslint-enable no-cond-assign */
+      if (!frag) frag = document.createDocumentFragment()
+      index = match.index
+
+      // 插入普通文本节点
+      if (index > lastIndex) {
+        frag.appendChild(
+          document.createTextNode(text.slice(lastIndex, index))
+        )
+      }
+
+      // 插入{{}}节点
+      const variable = match[1]
+      const watchingTextNode = document.createTextNode(variable)
+      Handlers.textNode.implement(vm, watchingTextNode, variable)
+
+      const update = (newVal, oldVal) => {
+        Handlers.textNode.update(vm, newVal, oldVal, watchingTextNode)
+      }
+      // 监听文本节点
+      const watcher = new Watcher(vm, variable, update)
+      update(watcher.value) // 执行时先update一次
+      frag.appendChild(watchingTextNode)
+
+      lastIndex = index + match[0].length
+    }
+
+    // 插入{{}}之后的普通节点
+    if (frag && lastIndex < text.length) {
+      frag.appendChild(
+        document.createTextNode(text.slice(lastIndex))
+      )
+    }
+
+    // 把原来的textnode 替换为 fragment
+    if (frag) replace(textNode, frag)
   }
 }

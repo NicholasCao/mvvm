@@ -1,7 +1,8 @@
 import Dep from './dep.js'
-import { deepGetter, isObject } from './utils.js'
+import { isObject } from './utils.js'
+import { parseExpression } from './expression.js'
 
-export default function Watcher (vm, expOrFn, callback) {
+export default function Watcher (vm, expression, callback, needSetter) {
   vm._watchers.push(this)
   this.vm = vm
 
@@ -12,7 +13,10 @@ export default function Watcher (vm, expOrFn, callback) {
   // 更新触发回调函数
   this.cb = callback
 
-  this.getter = deepGetter(vm, expOrFn)
+  const res = parseExpression(expression, needSetter)
+
+  this.getter = res.getter
+  this.setter = res.setter
 
   // 在创建watcher实例时先取一次值
   this.value = this.get()
@@ -28,9 +32,9 @@ Watcher.prototype = {
     return value
   },
 
-  // set (val) {
-  //   this.getter.call(this.vm, this.vm)
-  // },
+  set (val) {
+    if (this.setter) this.setter.call(this.vm, this.vm, val)
+  },
 
   update () {
     const value = this.get()
