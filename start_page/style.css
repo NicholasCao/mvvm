@@ -114,7 +114,7 @@ main {
   transition: all 0.25s;
   line-height: 20px;
   animation-name: delayedFadeIn;
-  animation-duration: 1.5s;
+  animation-duration: .8s;
   animation-iteration-count: 1;
   animation-delay: 0s;
   margin-block-start: 0.67em;
@@ -174,7 +174,7 @@ main {
 }
 
 .suggestionContainer {
-  margin-top: 50px;
+  margin-top: 20px;
   box-shadow: rgba(0,0,0,0.2) 0 0 10px;
   width: 500px;
   height: auto;
@@ -216,18 +216,29 @@ main {
   transition: opacity .4s;
 }
 .popUp h2 {
-  position: relative;
-  left: 70px;
-  top: 35px;
+  display: flex;
+  width: 460px;
+  align-items: center;
+  margin-left: 70px;
+  margin-top: 35px;
   font-size: 25px;
+  line-height: 38px;
   font-weight: normal;
   font-family: "Microsoft Yahei", Helvetica, sans-serif, "等线";
-  /* color: var(--txt-b-pure);  */
+}
+.popUp h2 .close {
+  margin-left: auto;
+  padding: 9px;
+  cursor: pointer;
+  height: 38px;
+  width: 38px;
+}
+.popUp h2 .close:hover path {
+  fill: rgb(92, 161, 255);;
 }
 .popUp .content {
-  position: relative;
-  left: 70px;
-  top: 50px;
+  margin-left: 70px;
+  margin-top: 15px;
   height: 350px;
   width: 460px;
   overflow-x: hidden;
@@ -249,13 +260,13 @@ main {
   display: inline-block;
   white-space: nowrap;
   outline: none;
-  font-size: 14px;
+  font-size: 15px;
 }
 .radio .radio-inner {
   border: 1px solid #dcdfe6;
   border-radius: 100%;
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   background-color: #fff;
   position: relative;
   cursor: pointer;
@@ -269,8 +280,8 @@ main {
   margin-right: 20px;
 }
 .checked .radio-inner {
-  border-color: #409eff;
-  background: #409eff;
+  border-color: rgb(92, 161, 255);;
+  background: rgb(92, 161, 255);;
 }
 .radio .radio-inner:after {
   width: 4px;
@@ -288,11 +299,10 @@ main {
   transform: translate(-50%,-50%) scale(1);
 }
 .radio .radio-label {
-  font-size: 14px;
   padding-left: 8px;
 }
 .checked .radio-label {
-  color: #409eff;
+  color: rgb(92, 161, 255);;
 }
 
 .popUp .content h4 {

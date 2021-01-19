@@ -1,3 +1,4 @@
+// use Mobius's cdn
 // https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_1.jpg
 const bgBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Default_'
 // https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live_Wallpaper_1.mp4
@@ -24,20 +25,14 @@ const vm = new VM({
   el: '#app',
   data: {
     status: 'nothing', // nothing searching setting
-    settingStyle: '',
     greeting: '',
     greetingStyle: '',
-    coverStyle: '',
     isLiveBg: false,
-    isImgBg: true,
     bgIndex: null,
     bgsPewview: ['bgPreview1', 'bgPreview2', 'bgPreview3', 'bgPreview4', 'bgPreview5', 'bgPreview6'],
-    bgPreviewClass: ['bgPreview', 'bgPreview', 'bgPreview', 'bgPreview',
-      'bgPreview', 'bgPreview', 'bgPreview', 'bgPreview'],
     bgsLivePewview: ['bgPreviewLive1', 'bgPreviewLive2'],
     bgLink: '',
     liveBgLink: '',
-    bgStyle: '',
     searchEngine: '',
     searchEngines: ['百度', '必应', '谷歌'],
     searchEnginesClass: ['', '', ''],
@@ -61,7 +56,11 @@ const vm = new VM({
     setting () {
       this.status = 'setting'
     },
+    close () {
+      this.status = 'nothing'
+    },
     input (e) {
+      // enter
       if (e.keyCode === 13) {
         this.search(this.word)
       }
@@ -75,37 +74,18 @@ const vm = new VM({
       this.searchEngine = searchEngine
     },
     changeBg (index) {
-      // hangdle '0+6'
-      this.bgIndex = eval(index)
+      this.bgIndex = index
     }
   },
   watch: {
-    status (val, oldVal) {
-      if (oldVal === 'setting') this.settingStyle = ''
-
-      if (val === 'nothing') {
-        this.coverStyle = ''
-        this.bgStyle = ''
-      } else if (val === 'searching') {
-        this.coverStyle = 'background-color: rgba(0,0,0,0.2);'
-        this.bgStyle = 'transform: scale(1.1);'
-      } else if (val === 'setting') {
-        this.settingStyle = 'opacity: 1; height: 500px;'
-        this.coverStyle = 'background-color: rgba(0,0,0,0.2);'
-      }
-    },
-    bgIndex (val, oldVal) {
+    bgIndex (val) {
       localStorage.setItem('start_page_bgIndex', val)
 
-      if (oldVal !== null) this.$set('bgPreviewClass', oldVal, 'bgPreview')
-      this.$set('bgPreviewClass', val, 'bgPreview selected')
       if (val >= 6) {
         this.isLiveBg = true
         this.liveBgLink = `${bgLiveBaseUrl}${val - 5}.mp4`
-        this.isImgBg = false
       } else {
         this.isLiveBg = false
-        this.isImgBg = true
         this.bgLink = `${bgBaseUrl}${val + 1}.jpg`
       }
     },
@@ -114,11 +94,6 @@ const vm = new VM({
     },
     searchEngine (val) {
       localStorage.setItem('start_page_searchEngine', val)
-
-      const index = this.searchEngines.indexOf(val)
-      const searchEnginesClass = ['', '', '']
-      searchEnginesClass[index] = 'checked'
-      this.searchEnginesClass = searchEnginesClass
 
       this.searchUrl = searchUrl[val]
     }
