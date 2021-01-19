@@ -126,26 +126,6 @@ describe('ViewModel', () => {
     vm.setName('Chen2')
   })
 
-  test('05_2_watch_nested_object2', done => {
-    const vm = new ViewModel({
-      data: function () {
-        return { user: { name: 'Chen' } }
-      },
-
-      methods: {
-        setName (name) {
-          this.user.name = name
-        }
-      }
-    })
-
-    vm.$watch('user.name', name => {
-      expect(name).toBe('Chen2')
-      done()
-    })
-    vm.setName('Chen2')
-  })
-
   test('06_watch_array', done => {
     const vm = new ViewModel({
       data: function () {
@@ -423,6 +403,53 @@ describe('ViewModel', () => {
       }
     )
     vm.numbers.sort()
+  })
+
+  test('19_simple_expression', () => {
+    const vm = new ViewModel({
+      data: {
+        a: 1,
+        b: {
+          c: 0
+        }
+      }
+    })
+    const mockFn = jest.fn()
+
+    vm.$watch(
+      'a + b.c',
+      mockFn
+    )
+    vm.b.c = 2
+    expect(mockFn).toHaveBeenCalledWith(3, 1)
+    vm.a = 2
+    expect(mockFn).toHaveBeenCalledWith(4, 3)
+    expect(mockFn).toBeCalledTimes(2)
+  })
+
+  test('20_ternary expression', () => {
+    const vm = new ViewModel({
+      data: {
+        a: 1,
+        b: {
+          c: 'c',
+          d: 'd'
+        }
+      }
+    })
+    const mockFn = jest.fn()
+
+    vm.$watch(
+      'a > 1 ? b.c : b.d',
+      mockFn
+    )
+    vm.a = 2
+    expect(mockFn).toHaveBeenCalledWith('c', 'd')
+    vm.b.c = 'c2'
+    expect(mockFn).toHaveBeenCalledWith('c2', 'c')
+    vm.b.d = 'd2'
+
+    expect(mockFn).toBeCalledTimes(2)
   })
 
   // test('99_lifecycle', () => {
