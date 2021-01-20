@@ -117,6 +117,16 @@
             </div>
           </div>
         </div>
+
+        <h3 style="margin-top: 20px;"> 用户信息 </h3>
+        <div class="inputBox">
+          <span> 昵称 </span>
+          <input vm-model="nickName" type="text" autocomplete="off" placeholder="仅用于问候语" />
+        </div>
+        <div class="inputBox">
+          <span> 生日 </span>
+          <input vm-model="birthday" type="text" autocomplete="off" placeholder="输入格式: 月-日" />
+        </div>
       </div>
     </div>
 
@@ -147,7 +157,7 @@
       }
     }
   </script>
-  <!-- <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script> -->
+  <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
   <script type="text/javascript" src="../dist/vm.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>

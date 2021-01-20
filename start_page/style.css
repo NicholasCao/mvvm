@@ -3,6 +3,7 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Microsoft Yahei Light", "Microsoft Yahei", PingFangSC-Regular, Helvetica, sans-serif, "等线";
+  /* font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif; */
 }
 
 body {
@@ -246,12 +247,13 @@ main {
 }
 .popUp .content h3 {
   margin-top: 10px;
+  margin-bottom: 15px;
   font-size: 18px;
   font-weight: normal;
   font-family: "Microsoft Yahei", Helvetica, sans-serif, "等线";
 }
 .radio {
-  margin: 10px 0;
+  /* margin: 10px 0; */
   color: #606266;
   font-weight: 500;
   line-height: 1;
@@ -308,7 +310,7 @@ main {
 .popUp .content h4 {
   position: relative;
   color: rgba(0,0,0,0.5);
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .popUp .content .bgPreviewContainer {
   display: flex;
@@ -395,6 +397,46 @@ main {
   background-color: rgba(0,0,0,0.2);
 }
 
+.popUp .content .inputBox {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.popUp .content .inputBox span{
+  font-family:"Helvetica Neue", Helvetica, "PingFang SC";
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 15px;
+  margin-right: 10px;
+  line-height: 35px;
+  height: 35px;
+}
+
+.popUp .content .inputBox input {
+  font-family:"Helvetica Neue", Helvetica, "PingFang SC";
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 5px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  outline: none;
+  padding: 0 15px;
+  transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+  flex: 1;
+}
+.popUp .content .inputBox input::placeholder{
+  color:#c0c4cc
+}
+.popUp .content .inputBox input:focus {
+  outline: none;
+  border-color: #409eff;
+}
 
 
 ::-webkit-scrollbar {

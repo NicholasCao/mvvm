@@ -12,28 +12,21 @@ const searchUrl = {
   '谷歌': 'https://www.google.com/search?q='
 }
 
-const getTime = function () {
-  const d = new Date()
-  let h = d.getHours()
-  let m = d.getMinutes()
-  if (h < 10) h = '0' + h
-  if (m < 10) m = '0' + m
-  return `${h}:${m}`
-}
-
 const vm = new VM({
   el: '#app',
   data: {
     status: 'nothing', // nothing searching setting
     greeting: '',
     greetingStyle: '',
+    nickName: null,
+    birthday: null,
     isLiveBg: false,
     bgIndex: null,
     bgsPewview: ['bgPreview1', 'bgPreview2', 'bgPreview3', 'bgPreview4', 'bgPreview5', 'bgPreview6'],
     bgsLivePewview: ['bgPreviewLive1', 'bgPreviewLive2'],
     bgLink: '',
     liveBgLink: '',
-    searchEngine: '',
+    searchEngine: null,
     searchEngines: ['百度', '必应', '谷歌'],
     searchEnginesClass: ['', '', ''],
     searchUrl: '',
@@ -96,20 +89,60 @@ const vm = new VM({
       localStorage.setItem('start_page_searchEngine', val)
 
       this.searchUrl = searchUrl[val]
+    },
+    nickName (val) {
+      localStorage.setItem('start_page_nickName', val)
+    },
+    birthday (val) {
+      localStorage.setItem('start_page_birthday', val)
     }
   }
 })
 
+// Init
 vm.bgIndex = Number(localStorage.getItem('start_page_bgIndex')) || 0
 vm.searchEngine = localStorage.getItem('start_page_searchEngine') || '百度'
+vm.nickName = localStorage.getItem('start_page_nickName') || ''
+vm.birthday = localStorage.getItem('start_page_birthday') || ''
+
+function getTime () {
+  const d = new Date()
+  let h = d.getHours()
+  let m = d.getMinutes()
+  if (h < 10) h = '0' + h
+  if (m < 10) m = '0' + m
+  return `${h}:${m}`
+}
+
+function isBirthday (now, birthday) {
+  let month = String(now.getMonth() + 1)
+  let date = String(now.getDate())
+
+  const birArray = birthday.split('-')
+  return equal(month, birArray[0]) && equal(date, birArray[1])
+}
+
+function equal (str, str2) {
+  if (str.length === 1) str = '0' + str
+  if (str2.length === 1) str2 = '0' + str2
+
+  return str === str2
+}
 
 const now = new Date()
 const hour = now.getHours()
-if (hour < 6) vm.greeting = '早上好！'
-else if (hour < 12) vm.greeting = '上午好！'
-else if (hour < 14) vm.greeting = '中午好！'
-else if (hour < 18) vm.greeting = '下午好！'
-else vm.greeting = '晚上好！'
+let greeting
+if (hour < 6) greeting = '早上好'
+else if (hour < 12) greeting = '上午好'
+else if (hour < 14) greeting = '中午好'
+else if (hour < 18) greeting = '下午好'
+else greeting = '晚上好'
+
+if (isBirthday(now, vm.birthday)) greeting = '生日快乐'
+if (vm.nickName) greeting += '，' + vm.nickName
+else greeting += '！'
+
+vm.greeting = greeting
 
 vm.greetingStyle = 'opacity: 1; top: 0;'
 setTimeout(() => {
@@ -119,6 +152,10 @@ setTimeout(() => {
 const oldTime = getTime()
 vm.time = oldTime
 
+/* 
+ * 定时更新时间
+ * 每秒监听时间，直至时间变化，改为每分钟更新时间
+ */
 const secInterval = setInterval(() => {
   const newTime = getTime()
   if (newTime !== oldTime) {
