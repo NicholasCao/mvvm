@@ -45,7 +45,7 @@ function makeSetterFn (exp) {
 
 const saved = []
 
-// those RE copy from vue-1.0
+// these RE are copied from vue-1.0
 // disable eslint
 
 /* eslint-disable no-useless-escape */
