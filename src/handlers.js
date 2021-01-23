@@ -171,15 +171,16 @@ export default {
             attrValue = compileExpression(attrValue)
 
             if (valueKey && attrValue.indexOf(`vm.${valueKey}`) > -1) {
-              attrValue = attrValue.replace(new RegExp(`vm.${valueKey}`, 'g'), `${exp}[${key}]`)
+              attrValue = attrValue.replace(new RegExp(`vm.${valueKey}(\\W)`, 'g'), `${exp}[${key}]$1`)
               flag = true
             }
             if (indexKey && attrValue.indexOf(`vm.${indexKey}`) > -1) {
-              attrValue = attrValue.replace(new RegExp(`vm.${indexKey}`, 'g'), key)
+              attrValue = attrValue.replace(new RegExp(`vm.${indexKey}(\\W)`, 'g'), `${key}$1`)
               flag = true
             }
             // 去掉vm
             attrValue = attrValue.replace(/vm./g, '')
+
             if (flag) {
               try {
                 cloneNode.setAttribute(name, attrValue)
