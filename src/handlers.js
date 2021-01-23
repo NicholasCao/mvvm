@@ -1,6 +1,6 @@
 import { replace, remove, insertNode } from './utils.js'
 import Compile from './compile.js'
-import { parseExpression, isSimplePath, compileExpression } from './expression.js'
+import { parseExpression, isSimplePath } from './expression.js'
 
 // 针对各种指令的回调函数
 export default {
@@ -121,8 +121,6 @@ export default {
         }
       }
       node._vmForNumber = value.length
-      let cloneNode
-      let html
 
       if (typeof value !== 'object') {
         console.error(`${exp}必须为对象或数组`)
@@ -130,75 +128,14 @@ export default {
       }
 
       for (const key in value) {
-        cloneNode = node.cloneNode(true)
-        html = cloneNode.innerHTML
-
-        if (valueKey) {
-          const re1 = new RegExp(`{{\\s*${valueKey}\\s*}}`, 'g')
-          html = html.replace(re1, value[key])
-          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=.*\\W(${valueKey})\\W`)
-          let matchs = html.match(re2)
-          while (matchs) {
-            const directive = matchs[0].replace(new RegExp(`(\\W)(${valueKey})(\\W)`), `$1${exp}[${key}]$3`)
-            html = html.replace(matchs[0], directive)
-            matchs = html.match(re2)
-          }
-        }
-        if (indexKey) {
-          const re1 = new RegExp(`{{\\s*${indexKey}\\s*}}`, 'g')
-          html = html.replace(re1, key)
-          const re2 = new RegExp(`(vm-bind:|vm-on:|:|@).*=.*\\W(${indexKey})\\W`)
-          let matchs = html.match(re2)
-          while (matchs) {
-            const directive = matchs[0].replace(new RegExp(`(\\W)(${indexKey})(\\W)`), `$1${key}$3`)
-            html = html.replace(matchs[0], directive)
-            matchs = html.match(re2)
-          }
-        }
-
-        cloneNode.innerHTML = html
+        const cloneNode = node.cloneNode(true)
         cloneNode.removeAttribute('vm-for')
 
-        const attrs = [...cloneNode.attributes]
-        let flag = false
-        let flag2 = false
-        attrs.forEach(attr => {
-          const name = attr.name.trim()
-          let attrValue = attr.value.trim()
+        const forVM = Object.create(vm)
+        forVM[valueKey] = vm[exp][key]
+        forVM[indexKey] = Array.isArray(value) ? Number(key) : key
 
-          if (/^(vm-bind:|vm-on:|:|@)/.test(name)) {
-            // 清除逗号前后的空格
-            attrValue = compileExpression(attrValue)
-
-            if (valueKey && attrValue.indexOf(`vm.${valueKey}`) > -1) {
-              attrValue = attrValue.replace(new RegExp(`vm.${valueKey}(\\W)`, 'g'), `${exp}[${key}]$1`)
-              flag = true
-            }
-            if (indexKey && attrValue.indexOf(`vm.${indexKey}`) > -1) {
-              attrValue = attrValue.replace(new RegExp(`vm.${indexKey}(\\W)`, 'g'), `${key}$1`)
-              flag = true
-            }
-            // 去掉vm
-            attrValue = attrValue.replace(/vm./g, '')
-
-            if (flag) {
-              try {
-                cloneNode.setAttribute(name, attrValue)
-              } catch {
-                flag2 = true
-                cloneNode.removeAttribute(name)
-              }
-              attr.value = attrValue
-            }
-          }
-        })
-
-        // flag2 遇到非法attribute 例如@click
-        if (flag2) {
-          cloneNode._attributes = attrs
-        }
-
-        new Compile(vm, cloneNode)
+        new Compile(forVM, cloneNode)
         frag.appendChild(cloneNode)
       }
 
@@ -223,3 +160,23 @@ export default {
     }
   }
 }
+
+// function ReactiveSetVM (obj, vm, data) {
+//   for (const key in obj) {
+//     const val = obj[key]
+
+//     if (hasOwn(vm._data, key)) {
+//       if (isObject(val)) ReactiveSetVM(val, vm)
+//       else {
+//         Object.defineProperty(obj, key, {
+//           enumerable: true,
+//           configurable: true,
+//           set (newVal) {
+//             obj[key] = newVal
+//             obj._data[key] = newVal
+//           }
+//         })
+//       }
+//     }
+//   }
+// }

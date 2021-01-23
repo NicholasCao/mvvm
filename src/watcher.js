@@ -3,7 +3,7 @@ import { isObject } from './utils.js'
 import { parseExpression } from './expression.js'
 
 export default function Watcher (vm, expression, callback, needSetter) {
-  vm._watchers.push(this)
+  // vm._watchers.push(this)
   this.vm = vm
 
   // 存放dep的ID

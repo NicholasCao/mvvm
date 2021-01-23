@@ -345,9 +345,9 @@ describe('ViewModel', () => {
     new Compile(vm, vm.$el)
 
     expect(vm.$el.innerHTML).toBe(`
-      <p class="ShangHai">
+      <p @click="click($event, city, index)" class="ShangHai">
         ShangHai
-      </p><p class="ShenZhen">
+      </p><p @click="click($event, city, index)" class="ShenZhen">
         ShenZhen
       </p>
     `)
@@ -410,9 +410,9 @@ describe('ViewModel', () => {
 
     expect(vm.$el.innerHTML).toBe(`
       <p>
-        <span @click="click($event, cities[0], 0)" class="ShangHai"> ShangHai </span>
+        <span @click="click($event, city, index)" class="ShangHai"> ShangHai </span>
       </p><p>
-        <span @click="click($event, cities[1], 1)" class="ShenZhen"> ShenZhen </span>
+        <span @click="click($event, city, index)" class="ShenZhen"> ShenZhen </span>
       </p>
     `)
 
