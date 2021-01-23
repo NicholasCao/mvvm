@@ -218,7 +218,7 @@ main {
 }
 .popUp h2 {
   display: flex;
-  width: 460px;
+  width: 480px;
   align-items: center;
   margin-left: 70px;
   margin-top: 35px;
@@ -235,17 +235,97 @@ main {
   width: 38px;
 }
 .popUp h2 .close:hover path {
-  fill: rgb(92, 161, 255);;
+  fill: rgb(92, 161, 255);
 }
 .popUp .content {
   margin-left: 70px;
   margin-top: 15px;
-  height: 350px;
+  height: 370px;
   width: 460px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
-.popUp .content h3 {
+
+/* note */
+#note .content {
+  display: flex;
+  flex-direction: column;
+}
+#note .noteBox {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+#note .noteBox .noteList {
+  /* float: left; */
+  position: relative;
+  transition: transform .3s;
+  height: 100%;
+}
+#note .noteBox .noteList:after {
+  content: "";
+  position: absolute;
+  background-color: #e4e7ed;
+  height: 100%;
+  width: 2px;
+  left: auto;
+  right: 0;
+  top: 0;
+}
+#note .noteBox .noteList .noteTitle {
+  /* 多出的显示... */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  width: 100px;
+  text-align: right;
+  padding-right: 20px;
+  height: 40px;
+  box-sizing: border-box;
+  line-height: 40px;
+  display: block;
+  list-style: none;
+  font-size: 14px;
+  color: #303133;
+  cursor: pointer;
+}
+#note .noteBox .noteList .selected {
+  color: rgb(92, 161, 255);
+}
+#note .noteBox .noteList .note:hover {
+  color: rgb(92, 161, 255);
+}
+#note .noteBox .noteList .activeBar {
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: auto;
+  width: 2px;
+  height: 40px;
+  
+  position: absolute;
+  background-color: rgb(92, 161, 255);
+  transition: transform .3s cubic-bezier(.645,.045,.355,1);
+  z-index: 101;
+}
+#note .noteBox textarea {
+  margin-left: 15px;
+  background-color: rgb(235, 235, 235);
+  flex: 1;
+  color: black;
+  font-family: "Microsoft Yahei Light", "Microsoft Yahei", Helvetica, sans-serif, 等线;
+  font-size: small;
+  resize: none;
+  padding: 10px 10px 10px 20px;
+  border-style: none;
+  outline: none;
+  border-radius: 10px;
+  transition: all 0.25s ease 0s;
+}
+
+/* setting */
+#setting .content h3 {
   margin-top: 10px;
   margin-bottom: 15px;
   font-size: 18px;
@@ -307,17 +387,17 @@ main {
   color: rgb(92, 161, 255);;
 }
 
-.popUp .content h4 {
+#setting .content h4 {
   position: relative;
   color: rgba(0,0,0,0.5);
   margin-top: 5px;
 }
-.popUp .content .bgPreviewContainer {
+#setting .content .bgPreviewContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.popUp .bgPreviewContainer .bgPreviewBox {
+#setting .bgPreviewContainer .bgPreviewBox {
   position: relative;
   display: inline-block;
   margin-top: 10px;
@@ -328,7 +408,7 @@ main {
   border-radius: 6px;
   overflow: hidden;
 }
-.popUp .bgPreviewContainer .bgPreviewBox .bgPreview {
+#setting .bgPreviewContainer .bgPreviewBox .bgPreview {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,14 +477,14 @@ main {
   background-color: rgba(0,0,0,0.2);
 }
 
-.popUp .content .inputBox {
+#setting .content .inputBox {
   width: 250px;
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
 }
-.popUp .content .inputBox span{
+#setting .content .inputBox span{
   font-family:"Helvetica Neue", Helvetica, "PingFang SC";
   color: rgba(0, 0, 0, 0.7);
   font-size: 15px;
@@ -413,7 +493,7 @@ main {
   height: 35px;
 }
 
-.popUp .content .inputBox input {
+#setting .content .inputBox input {
   font-family:"Helvetica Neue", Helvetica, "PingFang SC";
   -webkit-appearance: none;
   background-color: #fff;
@@ -430,17 +510,20 @@ main {
   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
   flex: 1;
 }
-.popUp .content .inputBox input::placeholder{
+#setting .content .inputBox input::placeholder{
   color:#c0c4cc
 }
-.popUp .content .inputBox input:focus {
+#setting .content .inputBox input:focus {
   outline: none;
-  border-color: #409eff;
+  border-color:rgb(92, 161, 255);
 }
 
 
 ::-webkit-scrollbar {
   width: 5px;
+}
+#note ::-webkit-scrollbar-track {
+  margin: 5px 0;
 }
 .popUp ::-webkit-scrollbar-thumb {
   background-color: rgba(0,0,0,.1);

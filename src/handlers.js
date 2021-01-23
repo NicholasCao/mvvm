@@ -1,6 +1,6 @@
 import { replace, remove, insertNode } from './utils.js'
 import Compile from './compile.js'
-import { parseExpression, isSimplePath } from './expression.js'
+import { parseExpression, isSimplePath, compileExpression } from './expression.js'
 
 // 针对各种指令的回调函数
 export default {
@@ -168,16 +168,18 @@ export default {
 
           if (/^(vm-bind:|vm-on:|:|@)/.test(name)) {
             // 清除逗号前后的空格
-            attrValue = attrValue.split(',').map(str => str.trim()).join(',')
+            attrValue = compileExpression(attrValue)
 
-            if (valueKey && attrValue.indexOf(valueKey) > -1) {
-              attrValue = attrValue.replace(valueKey, `${exp}[${key}]`)
+            if (valueKey && attrValue.indexOf(`vm.${valueKey}`) > -1) {
+              attrValue = attrValue.replace(new RegExp(`vm.${valueKey}`, 'g'), `${exp}[${key}]`)
               flag = true
             }
-            if (indexKey && attrValue.indexOf(indexKey) > -1) {
-              attrValue = attrValue.replace(indexKey, key)
+            if (indexKey && attrValue.indexOf(`vm.${indexKey}`) > -1) {
+              attrValue = attrValue.replace(new RegExp(`vm.${indexKey}`, 'g'), key)
               flag = true
             }
+            // 去掉vm
+            attrValue = attrValue.replace(/vm./g, '')
             if (flag) {
               try {
                 cloneNode.setAttribute(name, attrValue)

@@ -39,7 +39,7 @@
       b[{{key}}]: {{val}}
     </p>
     <p vm-for="(val, ab) in aba">
-      <span :class="abc[ab]"> {{ val }} </span>
+      <span :class="abc[ab] === 'a' ? 'ab' : 'aba'"> {{ val }} </span>
     </p>
   </div>
 <script type="text/javascript" src="vm.min.js"></script></body>
