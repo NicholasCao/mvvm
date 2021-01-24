@@ -78,6 +78,8 @@ const vm = new VM({
     },
     pinNote () {
       this.notes[this.noteIndex].pinned = !this.notes[this.noteIndex].pinned
+
+      store('notes', this.notes)
     },
     updateNote () {
       if (this.notes.length) this.noteContent = this.notes[this.noteIndex].content
