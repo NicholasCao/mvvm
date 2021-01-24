@@ -15,7 +15,7 @@ const searchUrl = {
 const vm = new VM({
   el: '#app',
   data: {
-    status: 'nothing', // nothing searching setting
+    status: 'nothing', // nothing searching writingNote setting
     greeting: '',
     greetingStyle: '',
     nickName: null,
@@ -32,7 +32,10 @@ const vm = new VM({
     searchUrl: '',
     time: '',
     word: '',
-    suggestion: []
+    suggestion: [],
+    notes: [],
+    noteContent: '',
+    noteIndex: 0
   },
   methods: {
     focus (e) {
@@ -45,6 +48,40 @@ const vm = new VM({
         this.word = ''
       }
       this.status = 'nothing'
+    },
+    goToNote (index) {
+      this.status = 'writingNote'
+      this.noteIndex = index
+      this.updateNote()
+    },
+    writeNote () {
+      this.status = 'writingNote'
+      this.updateNote()
+    },
+    newNote () {
+      this.notes.push({
+        content: '',
+        time: this.getCreateTime(),
+        pinned: false
+      })
+      this.noteIndex = this.notes.length - 1
+    },
+    selectNote (index) {
+      this.noteIndex = index
+    },
+    deleteNote () {
+      this.notes.splice(this.noteIndex, 1)
+      this.noteIndex && this.noteIndex--
+      this.updateNote()
+
+      store('notes', this.notes)
+    },
+    pinNote () {
+      this.notes[this.noteIndex].pinned = !this.notes[this.noteIndex].pinned
+    },
+    updateNote () {
+      if (this.notes.length) this.noteContent = this.notes[this.noteIndex].content
+      else this.noteContent = ''
     },
     setting () {
       this.status = 'setting'
@@ -68,11 +105,30 @@ const vm = new VM({
     },
     changeBg (index) {
       this.bgIndex = index
+    },
+    getCreateTime () {
+      const d = new Date()
+      return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${this.time}`
     }
   },
   watch: {
+    noteContent (val) {
+      if (this.notes.length) this.notes[this.noteIndex].content = val
+      else if (val !== '') {
+        this.notes.push({
+          content: val,
+          time: this.getCreateTime(),
+          pinned: false
+        })
+      }
+
+      store('notes', this.notes)
+    },
+    noteIndex () {
+      this.updateNote()
+    },
     bgIndex (val) {
-      localStorage.setItem('start_page_bgIndex', val)
+      store('bgIndex', val)
 
       if (val >= 6) {
         this.isLiveBg = true
@@ -86,24 +142,33 @@ const vm = new VM({
       if (val) jsonp(suggestionUrl + val)
     },
     searchEngine (val) {
-      localStorage.setItem('start_page_searchEngine', val)
+      store('searchEngine', val)
 
       this.searchUrl = searchUrl[val]
     },
     nickName (val) {
-      localStorage.setItem('start_page_nickName', val)
+      store('nickName', val)
     },
     birthday (val) {
-      localStorage.setItem('start_page_birthday', val)
+      store('birthday', val)
     }
   }
 })
 
 // Init
-vm.bgIndex = Number(localStorage.getItem('start_page_bgIndex')) || 0
-vm.searchEngine = localStorage.getItem('start_page_searchEngine') || '百度'
-vm.nickName = localStorage.getItem('start_page_nickName') || ''
-vm.birthday = localStorage.getItem('start_page_birthday') || ''
+vm.notes = withdraw('notes') || []
+vm.bgIndex = withdraw('bgIndex') || 0
+vm.searchEngine = withdraw('searchEngine') || '百度'
+vm.nickName = withdraw('nickName') || ''
+vm.birthday = withdraw('birthday') || ''
+
+function store (key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
+}
+
+function withdraw (key) {
+  return JSON.parse(localStorage.getItem(key))
+}
 
 function getTime () {
   const d = new Date()
@@ -115,8 +180,8 @@ function getTime () {
 }
 
 function isBirthday (now, birthday) {
-  let month = String(now.getMonth() + 1)
-  let date = String(now.getDate())
+  const month = String(now.getMonth() + 1)
+  const date = String(now.getDate())
 
   const birArray = birthday.split('-')
   return equal(month, birArray[0]) && equal(date, birArray[1])
@@ -152,7 +217,7 @@ setTimeout(() => {
 const oldTime = getTime()
 vm.time = oldTime
 
-/* 
+/*
  * 定时更新时间
  * 每秒监听时间，直至时间变化，改为每分钟更新时间
  */

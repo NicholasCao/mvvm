@@ -31,10 +31,47 @@ body {
   box-shadow: rgba(0,0,0,0.05) 0 10px 20px;
 }
 
+.pinnedNotesBox {
+  z-index: 100;
+  position: fixed;
+  top: 30px;
+  left: 50px;
+}
+.pinnedNotesBox .pinnedNotes {
+  padding: 10px 20px;
+  width: 210px;
+
+  color: #000;
+  font-size: small;
+  font-family: "Microsoft Yahei",sans-serif;
+  display: block;
+  width: 250px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  box-shadow: rgba(0,0,0,0.05) 0 10px 20px;
+  cursor: pointer;
+}
+.pinnedNotesBox .pinnedNotes .content {
+  color: #000;
+  font-size: small;
+  font-family: "Microsoft Yahei",sans-serif;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.pinnedNotesBox .pinnedNotes .time {
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 10px;
+  font-family: "Microsoft Yahei",sans-serif;
+}
+
 .menu {
   z-index: 100;
   position: fixed;
-  top: 25px;
+  top: 30px;
   right: 35px;
   animation: fadeIn .3s ease;
 }
@@ -106,7 +143,7 @@ main {
   transform: scale(1.2);
 }
 
-.time {
+.timeBox .time {
   color: white;
   font-size: 36px;
   font-weight: inherit;
@@ -218,9 +255,9 @@ main {
 }
 .popUp h2 {
   display: flex;
-  width: 480px;
+  width: 500px;
   align-items: center;
-  margin-left: 70px;
+  margin-left: 60px;
   margin-top: 35px;
   font-size: 25px;
   line-height: 38px;
@@ -238,15 +275,21 @@ main {
   fill: rgb(92, 161, 255);
 }
 .popUp .content {
-  margin-left: 70px;
+  margin-left: 60px;
   margin-top: 15px;
   height: 370px;
-  width: 460px;
+  width: 480px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
 
 /* note */
+#note .new {
+  cursor: pointer;
+  padding: 9px;
+  width: 38px;
+  height: 38px;
+}
 #note .content {
   display: flex;
   flex-direction: column;
@@ -278,9 +321,10 @@ main {
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  border-bottom: 1px solid #e6e6e6;
   width: 100px;
-  text-align: right;
-  padding-right: 20px;
+  /* text-align: right; */
+  margin-right: 10px;
   height: 40px;
   box-sizing: border-box;
   line-height: 40px;
@@ -292,6 +336,7 @@ main {
 }
 #note .noteBox .noteList .selected {
   color: rgb(92, 161, 255);
+  border-color: rgb(92, 161, 255);
 }
 #note .noteBox .noteList .note:hover {
   color: rgb(92, 161, 255);
@@ -315,13 +360,34 @@ main {
   flex: 1;
   color: black;
   font-family: "Microsoft Yahei Light", "Microsoft Yahei", Helvetica, sans-serif, 等线;
-  font-size: small;
+  font-size: 16px;
   resize: none;
   padding: 10px 10px 10px 20px;
   border-style: none;
   outline: none;
   border-radius: 10px;
   transition: all 0.25s ease 0s;
+}
+#note .noteOperations {
+  display: flex;
+  margin-top: 5px;
+  justify-content: flex-end;
+  align-items: center;
+}
+#note .noteOperations .time {
+  font-size: small;
+  margin-right: 5px;
+}
+#note .noteOperations .icon {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+#note .noteOperations .star {
+  width: 32px;
+  height: 32px;
+  /* margin: 0 3px 0 5px; */
 }
 
 /* setting */
@@ -362,8 +428,8 @@ main {
   margin-right: 20px;
 }
 .checked .radio-inner {
-  border-color: rgb(92, 161, 255);;
-  background: rgb(92, 161, 255);;
+  border-color: rgb(92, 161, 255);
+  background: rgb(92, 161, 255);
 }
 .radio .radio-inner:after {
   width: 4px;
@@ -384,7 +450,7 @@ main {
   padding-left: 8px;
 }
 .checked .radio-label {
-  color: rgb(92, 161, 255);;
+  color: rgb(92, 161, 255);
 }
 
 #setting .content h4 {
@@ -401,10 +467,10 @@ main {
   position: relative;
   display: inline-block;
   margin-top: 10px;
-  margin-right: 6px;
+  margin-right: 8px;
   left: 0;
-  width: 135px;
-  height: 90px;
+  width: 145px;
+  height: 93px;
   border-radius: 6px;
   overflow: hidden;
 }
