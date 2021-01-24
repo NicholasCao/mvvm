@@ -1,6 +1,7 @@
 import { replace, remove, insertNode } from './utils.js'
 import Compile from './compile.js'
 import { parseExpression, isSimplePath } from './expression.js'
+import { defineReactive } from './observer.js'
 
 // 针对各种指令的回调函数
 export default {
@@ -132,8 +133,9 @@ export default {
         cloneNode.removeAttribute('vm-for')
 
         const forVM = Object.create(vm)
-        forVM[valueKey] = vm[exp][key]
-        forVM[indexKey] = Array.isArray(value) ? Number(key) : key
+
+        defineReactive(forVM, valueKey, vm[exp][key])
+        defineReactive(forVM, indexKey, Array.isArray(value) ? Number(key) : key)
 
         new Compile(forVM, cloneNode)
         frag.appendChild(cloneNode)

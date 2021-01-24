@@ -19,9 +19,6 @@ methodsToPatch.forEach(method => {
   // 缓存原型自身的方法
   const original = arrayProto[method]
   def(arrayMethods, method, function mutator (...args) {
-    // 保存旧的长度 用于vm-for
-    this._oldLength = this.length
-
     // 先执行原型自身的方法
     const result = original.apply(this, args)
     const ob = this.__ob__
@@ -65,8 +62,6 @@ function Observer (value) {
   def(value, '__ob__', this)
 
   if (Array.isArray(value)) {
-    // 不可枚举
-    def(value, '_oldLength', 0)
     value.__proto__ = arrayMethods
     this.observeArray(value)
   } else {
@@ -88,7 +83,7 @@ Observer.prototype = {
   }
 }
 
-function defineReactive (obj, key, val) {
+export function defineReactive (obj, key, val) {
   const dep = new Dep()
 
   let childOb = observe(val)
