@@ -654,7 +654,13 @@ main {
   .timeBox .time {
     font-size: 28px;
   }
+  .input:hover{
+    width: 80%;
+  }
   .input:focus{
+    width: 80%;
+  }
+  .suggestionContainer {
     width: 80%;
   }
   .popUp {
