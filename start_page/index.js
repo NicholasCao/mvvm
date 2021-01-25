@@ -77,8 +77,20 @@ const vm = new VM({
       store('notes', this.notes)
     },
     pinNote () {
-      this.notes[this.noteIndex].pinned = !this.notes[this.noteIndex].pinned
+      let count = 0
+      this.notes.forEach(note => {
+        note.pinned && count++
+      })
 
+      if (count < 3) {
+        this.notes[this.noteIndex].pinned = true
+        store('notes', this.notes)
+      } else {
+        alert('最多只能固定三条便笺哦')
+      }
+    },
+    cancelPinNote () {
+      this.notes[this.noteIndex].pinned = false
       store('notes', this.notes)
     },
     updateNote () {

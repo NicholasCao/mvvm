@@ -39,7 +39,6 @@ body {
 }
 .pinnedNotesBox .pinnedNotes {
   padding: 10px 20px;
-  width: 210px;
 
   color: #000;
   font-size: small;
@@ -300,20 +299,14 @@ main {
   flex-direction: row;
 }
 #note .noteBox .noteList {
-  /* float: left; */
   position: relative;
   transition: transform .3s;
-  height: 100%;
+  overflow-x: hidden;
+  height: 320px;
+  overflow-y: auto;
 }
-#note .noteBox .noteList:after {
-  content: "";
-  position: absolute;
-  background-color: #e4e7ed;
-  height: 100%;
-  width: 2px;
-  left: auto;
-  right: 0;
-  top: 0;
+#note .noteBox .noteList::-webkit-scrollbar {
+	width: 0;
 }
 #note .noteBox .noteList .noteTitle {
   /* 多出的显示... */
@@ -321,10 +314,10 @@ main {
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  border-bottom: 1px solid #e6e6e6;
-  width: 100px;
-  /* text-align: right; */
-  margin-right: 10px;
+  position: relative;
+  /* border-bottom: 1px solid #e6e6e6; */
+  width: 110px;
+  padding-right: 15px;
   height: 40px;
   box-sizing: border-box;
   line-height: 40px;
@@ -334,9 +327,31 @@ main {
   color: #303133;
   cursor: pointer;
 }
+
+#note .noteBox .noteList .noteTitle:before {
+  content: "";
+  position: absolute;
+  background-color: #e6e6e6;
+  height: 1px;
+  width: 95px;
+  left: 0;
+  bottom: 0;
+}
+#note .noteBox .noteList .noteTitle:after {
+  content: "";
+  position: absolute;
+  background-color: #e4e7ed;
+  height: 40px;
+  width: 2px;
+  left: auto;
+  right: 0;
+  top: 0;
+}
 #note .noteBox .noteList .selected {
   color: rgb(92, 161, 255);
-  border-color: rgb(92, 161, 255);
+}
+#note .noteBox .noteList .selected:before  {
+  background-color:  rgb(92, 161, 255);
 }
 #note .noteBox .noteList .note:hover {
   color: rgb(92, 161, 255);
@@ -355,6 +370,7 @@ main {
   z-index: 101;
 }
 #note .noteBox textarea {
+  height: 320px;
   margin-left: 15px;
   background-color: rgb(235, 235, 235);
   flex: 1;
@@ -557,6 +573,7 @@ main {
   margin-right: 10px;
   line-height: 35px;
   height: 35px;
+  white-space: nowrap;
 }
 
 #setting .content .inputBox input {
@@ -612,3 +629,67 @@ main {
 /* .wv-lt-refresh a {
   display: none !important;
 } */
+
+
+@media screen and (max-width: 600px) {
+  .pinnedNotesBox {
+    top: 3%;
+    left: 3%;
+    width: 45%;
+    height: 135px;
+    overflow: auto;
+  }
+  .pinnedNotesBox .pinnedNotes {
+    padding: 8px 16px;
+    width: 100%;
+  }
+  .menu {
+    top: 3%;
+    right: 2%;
+  }
+  .menu .icon {
+    width: 22px;
+    margin-right: 10px;
+  }
+  .timeBox .time {
+    font-size: 28px;
+  }
+  .input:focus{
+    width: 80%;
+  }
+  .popUp {
+    width: 90%;
+    left: 5%;
+  }
+  .popUp h2 {
+    width: 85%;
+    margin-left: 10%;
+  }
+  .popUp .content {
+    width: 80%;
+    margin-left: 10%;
+  }
+  #setting .bgPreviewContainer .bgPreviewBox {
+    width: calc(50% - 10px);
+    height: 23vw;
+  }
+  #setting .content .inputBox {
+    width: 80%;
+  }
+  #setting .content .inputBox input {
+    width: 100%;
+  }
+  #note .noteBox .noteList {
+    width: 36%
+  }
+  #note .noteBox .noteList .noteTitle {
+    width: 100%;
+  }
+  #note .noteBox .noteList .noteTitle:before {
+    width: 88%;
+  }
+  #note .noteBox textarea {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+}
