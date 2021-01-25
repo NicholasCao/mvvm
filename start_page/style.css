@@ -685,11 +685,8 @@ main {
   #setting .content .inputBox input {
     width: 100%;
   }
-  #note .noteBox .noteList {
-    width: 36%
-  }
   #note .noteBox .noteList .noteTitle {
-    width: 100%;
+    max-width: 25vw;
   }
   #note .noteBox .noteList .noteTitle:before {
     width: 88%;
