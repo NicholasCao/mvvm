@@ -160,7 +160,7 @@
         <h4> 静态 </h4>
         <div class="bgPreviewContainer">
           <div vm-for="(val, index) in bgsPewview" class="bgPreviewBox">
-            <div :id="val" @click="changeBg(index)" :class="bgIndex === index ? 'bgPreview selected' : 'bgPreview'">
+            <div :id="status === 'setting' ? val : ''" @click="changeBg(index)" :class="bgIndex === index ? 'bgPreview selected' : 'bgPreview'">
               <span class="bgPreviewMask"></span>
               <svg class="√" viewBox="0 0 1024 1024">
                 <path d="M943.9 228.5c-16.1-17.6-43.5-18.8-61-2.6L383.7 708.3 143.3 442.7c-16-17.7-43.3-19-61-3-17.7 16-19 43.3-3 61L348 797.6c2.1 2.3 4.4 4.3 6.8 6.1 16.3 12.5 39.7 12 55.4-2.4l531.1-511.7c17.6-16.2 18.8-43.5 2.6-61.1z"></path>
@@ -171,7 +171,7 @@
         <h4> 动态 </h4>
         <div class="bgPreviewContainer">
           <div vm-for="(val, index) in bgsLivePewview" class="bgPreviewBox">
-            <div :id="val" @click="changeBg(index + 6)" :class="bgIndex === index+6 ? 'bgPreview selected' : 'bgPreview'">
+            <div :id="status === 'setting' ? val : ''" @click="changeBg(index + 6)" :class="bgIndex === index+6 ? 'bgPreview selected' : 'bgPreview'">
               <span class="bgPreviewMask"></span>
               <svg class="√" viewBox="0 0 1024 1024" >
                 <path d="M943.9 228.5c-16.1-17.6-43.5-18.8-61-2.6L383.7 708.3 143.3 442.7c-16-17.7-43.3-19-61-3-17.7 16-19 43.3-3 61L348 797.6c2.1 2.3 4.4 4.3 6.8 6.1 16.3 12.5 39.7 12 55.4-2.4l531.1-511.7c17.6-16.2 18.8-43.5 2.6-61.1z"></path>
