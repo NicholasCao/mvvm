@@ -4,7 +4,7 @@ const bgBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/images/BG_A_Def
 // https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live_Wallpaper_1.mp4
 const bgLiveBaseUrl = 'https://cdn.jsdelivr.net/gh/MobiusBeta/assets/videos/Live_Wallpaper_'
 
-const suggestionUrl = 'http://suggestion.baidu.com/su?wd='
+const suggestionUrl = 'https://suggestion.baidu.com/su?wd='
 
 const searchUrl = {
   '百度': 'https://www.baidu.com/s?ie=utf-8&word=',
