@@ -86,7 +86,7 @@ export default {
       const match = expression.match(re1)
       let valueKey, indexKey
 
-      // (value, key) in array
+      // example: (value, key) in array
       // match = ['(value, key) in array', '(value, key)', 'array']
       if (match) {
         // match1 = [value, key]
@@ -113,7 +113,9 @@ export default {
         frag
       }
     },
-    // 将v-for节点克隆 再根据值的长度克隆进去再compile渲染 如果值变更 则将之前的节点全部删除 重新渲染
+    // 将v-for节点克隆
+    // 再根据值的长度克隆进去再compile渲染
+    // 如果值变更 则将之前的节点全部删除 重新渲染
     update (vm, node, exp, value, indexKey, valueKey, anchor, frag) {
       if (node._vmForNumber) {
         for (let i = 0; i < node._vmForNumber; i++) {
@@ -162,23 +164,3 @@ export default {
     }
   }
 }
-
-// function ReactiveSetVM (obj, vm, data) {
-//   for (const key in obj) {
-//     const val = obj[key]
-
-//     if (hasOwn(vm._data, key)) {
-//       if (isObject(val)) ReactiveSetVM(val, vm)
-//       else {
-//         Object.defineProperty(obj, key, {
-//           enumerable: true,
-//           configurable: true,
-//           set (newVal) {
-//             obj[key] = newVal
-//             obj._data[key] = newVal
-//           }
-//         })
-//       }
-//     }
-//   }
-// }

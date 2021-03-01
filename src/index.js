@@ -5,10 +5,6 @@ import { isObject } from './utils.js'
 
 // ViewModel
 export default function VM (options) {
-  // // 存放观察者实例
-  // this._watchers = []
-  // // 存放文本节点 在compile上会用到
-  // this._textNodes = []
   this.$options = options
   this.init()
 }

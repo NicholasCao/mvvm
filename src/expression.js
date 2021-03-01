@@ -1,4 +1,7 @@
-// return getter
+// return {
+//  getter,
+//  setter
+// }
 export function parseExpression (exp, needSetter) {
   exp = exp.trim()
 
