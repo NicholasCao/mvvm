@@ -67,8 +67,8 @@ export default {
   // {{}}
   textNode: {
     priority: 1,
-    implement (vm, textNode, variable) {
-
+    implement (vm, textNode, expression) {
+      // handle in compile
     },
     update (vm, newVal, oldVal, textNode) {
       textNode.data = newVal

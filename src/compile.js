@@ -80,10 +80,9 @@ Compile.prototype = {
   },
 
   compileElement (node) {
-    // node._attributes 为vm-for修改后的attributes
-    if (node.hasAttributes() || node._attributes) {
+    if (node.hasAttributes()) {
       let isFor = false
-      const attrs = node._attributes || [...node.attributes]
+      const attrs = [...node.attributes]
 
       if (node.attributes['vm-for']) {
         isFor = true
@@ -182,15 +181,15 @@ Compile.prototype = {
       }
 
       // 插入{{}}节点
-      const variable = match[1]
-      const watchingTextNode = document.createTextNode(variable)
-      Handlers.textNode.implement(vm, watchingTextNode, variable)
+      const expression = match[1]
+      const watchingTextNode = document.createTextNode(expression)
+      Handlers.textNode.implement(vm, watchingTextNode, expression)
 
       const update = (newVal, oldVal) => {
         Handlers.textNode.update(vm, newVal, oldVal, watchingTextNode)
       }
       // 监听文本节点
-      const watcher = new Watcher(vm, variable, update)
+      const watcher = new Watcher(vm, expression, update)
       update(watcher.value) // 执行时先update一次
       frag.appendChild(watchingTextNode)
 
