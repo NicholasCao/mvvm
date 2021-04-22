@@ -125,6 +125,7 @@ body {
 }
 
 main {
+  margin-top: 5vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -694,5 +695,36 @@ main {
   #note .noteBox textarea {
     margin-left: 10px;
     font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 1500px) and (min-height: 1000px) {
+  .timeBox .time {
+    font-size: 38px;
+  }
+  .input {
+    font-size: 14px;
+    width: 280px;
+  }
+  .input:hover {
+    width: 550px;
+  }
+  .input:focus {
+    width: 550px;
+  }
+  .suggestionContainer {
+    width: 550px;
+  }
+
+}
+@media screen and (min-height: 800px) {
+  main {
+    margin-top: 10vh;
+  }
+}
+
+@media screen and (min-height: 1080px) {
+  main {
+    margin-top: 15vh;
   }
 }
