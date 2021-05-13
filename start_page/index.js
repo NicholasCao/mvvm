@@ -61,7 +61,7 @@ const vm = new VM({
     newNote () {
       this.notes.push({
         content: '',
-        time: this.getCreateTime(),
+        time: this.getTime(),
         pinned: false
       })
       this.noteIndex = this.notes.length - 1
