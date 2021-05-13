@@ -18,22 +18,22 @@ const vm = new VM({
     status: 'nothing', // nothing searching writingNote setting
     greeting: '',
     greetingStyle: '',
-    nickName: null,
-    birthday: null,
+    nickName: withdraw('nickName') || '',
+    birthday: withdraw('birthday') || '',
     isLiveBg: false,
-    bgIndex: null,
+    bgIndex: null, // to trigger watch
     bgsPewview: ['bgPreview1', 'bgPreview2', 'bgPreview3', 'bgPreview4', 'bgPreview5', 'bgPreview6'],
     bgsLivePewview: ['bgPreviewLive1', 'bgPreviewLive2'],
     bgLink: '',
     liveBgLink: '',
-    searchEngine: null,
+    searchEngine: withdraw('searchEngine') || '百度',
     searchEngines: ['百度', '必应', '谷歌'],
     searchEnginesClass: ['', '', ''],
     searchUrl: '',
     time: '',
     word: '',
     suggestion: [],
-    notes: [],
+    notes: withdraw('notes') || [],
     noteContent: '',
     noteIndex: 0
   },
@@ -173,12 +173,8 @@ const vm = new VM({
   }
 })
 
-// Init
-vm.notes = withdraw('notes') || []
+// trigger watch
 vm.bgIndex = withdraw('bgIndex') || 0
-vm.searchEngine = withdraw('searchEngine') || '百度'
-vm.nickName = withdraw('nickName') || ''
-vm.birthday = withdraw('birthday') || ''
 
 function store (key, value) {
   localStorage.setItem(key, JSON.stringify(value))
