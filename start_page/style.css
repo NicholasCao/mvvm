@@ -130,6 +130,7 @@ main {
   flex-direction: column;
   align-items: center;
 }
+
 .timeBox {
   z-index: 100;
   margin-top: 60px;
@@ -602,7 +603,6 @@ main {
   border-color:rgb(92, 161, 255);
 }
 
-
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -715,8 +715,20 @@ main {
   .suggestionContainer {
     width: 550px;
   }
-
 }
+
+@media screen and (max-height: 680px) {
+  main {
+    margin-top: 3vh;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  main {
+    margin-top: 0;
+  }
+}
+
 @media screen and (min-height: 800px) {
   main {
     margin-top: 10vh;
