@@ -120,18 +120,22 @@ const vm = new VM({
     changeBg (index) {
       this.bgIndex = index
     },
-    getCreateTime () {
+    getTime () {
       const d = new Date()
       return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 ${this.time}`
     }
   },
   watch: {
     noteContent (val) {
-      if (this.notes.length) this.notes[this.noteIndex].content = val
-      else if (val !== '') {
+      if (this.notes.length) {
+        if (this.notes[this.noteIndex].content !== val) {
+          this.notes[this.noteIndex].content = val
+          this.notes[this.noteIndex].time = this.getTime()
+        }
+      } else if (val !== '') {
         this.notes.push({
           content: val,
-          time: this.getCreateTime(),
+          time: this.getTime(),
           pinned: false
         })
       }
