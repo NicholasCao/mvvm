@@ -29,8 +29,7 @@ const vm = new VM({
     searchEngine: withdraw('searchEngine') || '百度',
     searchEngines: ['百度', '必应', '谷歌'],
     searchEnginesClass: ['', '', ''],
-    searchUrl: '',
-    time: '',
+    time: getTime(),
     word: '',
     suggestion: [],
     notes: withdraw('notes') || [],
@@ -112,7 +111,7 @@ const vm = new VM({
     search (word) {
       this.suggestion = []
       this.word = ''
-      window.open(this.searchUrl + word)
+      window.open(searchUrl[this.searchEngine] + word)
     },
     changeSearchEngine (searchEngine) {
       this.searchEngine = searchEngine
@@ -161,8 +160,6 @@ const vm = new VM({
     },
     searchEngine (val) {
       store('searchEngine', val)
-
-      this.searchUrl = searchUrl[val]
     },
     nickName (val) {
       store('nickName', val)
@@ -228,16 +225,13 @@ setTimeout(() => {
   vm.greetingStyle = 'opacity: 0; top: -100px;'
 }, 3000)
 
-const oldTime = getTime()
-vm.time = oldTime
-
 /*
  * 定时更新时间
  * 每秒监听时间，直至时间变化，改为每分钟更新时间
  */
 const secInterval = setInterval(() => {
   const newTime = getTime()
-  if (newTime !== oldTime) {
+  if (newTime !== vm.time) {
     vm.time = newTime
     setInterval(() => {
       vm.time = getTime()
