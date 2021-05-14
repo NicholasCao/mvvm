@@ -92,10 +92,6 @@ function rewrite (raw) {
   const c = raw.charAt(0)
   let path = raw.slice(1)
 
-  path = path.indexOf('"') > -1
-    ? path.replace(restoreRE, restore)
-    : path
-
   return c + 'vm.' + path
 }
 

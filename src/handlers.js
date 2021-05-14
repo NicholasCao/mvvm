@@ -21,9 +21,9 @@ export default {
       }
       node['on' + name] = fn
     },
-    update (vm, node, name, newVal, oldVal) {
+    // update (vm, node, name, newVal, oldVal) {
 
-    }
+    // }
   },
 
   // vm-bind:|:

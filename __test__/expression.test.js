@@ -19,4 +19,7 @@ describe('expression', () => {
     expect(res.getter).toBe(noop)
     expect(res.setter).toBe(noop)
   })
+  test('101_test_noop', () => {
+    expect(noop()).toBe(undefined)
+  })
 })
